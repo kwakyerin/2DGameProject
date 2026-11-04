@@ -10,7 +10,7 @@ class Pink:
     
     #핑킹 그리기
     def draw(self):
-        self.image.draw(self.x,self.y)
+        self.image.clip_draw(0,0,32,32,self.x,self.y,70,70)
         pass
 
     #핑킹 애니메이션 관리
