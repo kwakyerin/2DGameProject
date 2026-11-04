@@ -1,20 +1,22 @@
 from pico2d import*
-
+from Pink import Pink
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running
+    global running,pink
     running=True
+    pink=Pink()
     pass
 
 #게임 상태 업데이트
 def update_world():
+    pink.update()
     pass
 
 #화면에 그리기
 def render_world():
     clear_canvas()
-    #여기 사이에 객체추가
+    pink.draw()
     update_canvas()
 
 #컨트롤 관리(현재는 esc키만 연결)

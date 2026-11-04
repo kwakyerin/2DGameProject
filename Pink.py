@@ -3,7 +3,7 @@ from pico2d import load_image
 class Pink:
     #핑킹 속성 초기화
     def __init__(self):
-        self.image('Pink/Pink_Idle')
+        self.image=load_image('Pink/Pink_Idle.png')
         self.x=400
         self.y=300
         pass
