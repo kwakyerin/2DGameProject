@@ -4,7 +4,19 @@ open_canvas()
 
 running=True
 
-#esc키 연결
+#초기화
+def reset_world():
+    pass
+
+#게임 상태 업데이트
+def update_world():
+    pass
+
+#화면에 그리기
+def render_world():
+    pass
+
+#컨트롤 관리(현재는 esc키만 연결)
 def handle_events():
     global running
 
