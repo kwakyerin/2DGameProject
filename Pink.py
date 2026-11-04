@@ -9,6 +9,7 @@ class Pink:
         self.y=300
 
         self.frame=0
+        self.speed=2
         self.dir=0
         pass
     
@@ -20,5 +21,5 @@ class Pink:
     #핑킹 애니메이션 관리
     def update(self):
         self.frame=(self.frame+1)%4
-        self.x+=self.dir
+        self.x+=self.dir*self.speed
         pass
