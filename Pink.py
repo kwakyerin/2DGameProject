@@ -5,12 +5,16 @@ class Pink:
     def __init__(self):
         self.Idle_image=load_image('Pink/Pink_Idle.png')
         self.Run_image=load_image('Pink/Pink_Run.png')
+        self.Attack_image=load_image('Pink/Pink_Attack2.png')
+        
         self.x=35
-        self.y=35
+        self.y=100
 
         self.frame=0
         self.speed=0
         self.dir=1
+
+        self.is_attack=False
 
         # 애니메이션 시간 초기화
         self.animation_time = 0
@@ -49,5 +53,9 @@ class Pink:
         # 일정 시간이 지나면 프레임 변경
         if self.animation_time >= frame_delay:
             self.frame = (self.frame + 1) % frame_count
-            self.animation_time = 0    
+            self.animation_time = 0
+
+    def attack(self):
+        pass
+
    
