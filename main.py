@@ -27,9 +27,20 @@ def handle_events():
     for event in event_list:
         if event.type == SDL_QUIT:
             running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
 
+        elif event.type==SDL_KEYDOWN:
+            if event.key==SDLK_ESCAPE:
+                running=False
+            elif event.key==SDLK_a:
+                pink.dir-=1
+            elif event.key==SDLK_d:
+                pink.dir+=1
+
+        elif event.type==SDL_KEYUP:
+            if event.key==SDLK_a:
+                pink.dir+=1
+            elif event.key==SDLK_d:
+                pink.dir-=1                    
 
 
 open_canvas()
@@ -40,6 +51,6 @@ while running:
     handle_events()
     update_world()
     render_world()
-    delay(0.15)
+    delay(0.01)
 
 close_canvas()
