@@ -34,15 +34,19 @@ def handle_events():
             elif event.key==SDLK_a:
                 pink.dir=-1
                 pink.speed=3
+                pink.frame=0
             elif event.key==SDLK_d:
                 pink.dir=1
                 pink.speed=3
+                pink.frame=0
 
         elif event.type==SDL_KEYUP:
             if event.key==SDLK_a and pink.dir==-1:
                 pink.speed=0
+                pink.frame=0
             elif event.key==SDLK_d and pink.dir==1:
-                pink.speed=0                   
+                pink.speed=0   
+                pink.frame=0                
 
 
 open_canvas()
