@@ -24,6 +24,7 @@ def handle_events():
     global running
 
     event_list = get_events()
+
     for event in event_list:
         if event.type == SDL_QUIT:
             running = False
@@ -35,10 +36,14 @@ def handle_events():
                 pink.dir=-1
                 pink.speed=3
                 pink.frame=0
+                pink.is_attack=False
             elif event.key==SDLK_d:
                 pink.dir=1
                 pink.speed=3
                 pink.frame=0
+                pink.is_attack=False
+            elif event.key==SDLK_j:
+                pink.attack()    
 
         elif event.type==SDL_KEYUP:
             if event.key==SDLK_a and pink.dir==-1:

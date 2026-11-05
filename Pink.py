@@ -22,8 +22,10 @@ class Pink:
     #핑킹 그리기
     def draw(self):
 
-        if self.speed == 0:
-            self.image = self.Idle_image
+        if self.is_attack:
+            self.image=self.Attack_image
+        elif self.speed == 0:
+            self.image = self.Idle_image   
         else:
             self.image = self.Run_image
 
@@ -34,28 +36,41 @@ class Pink:
             self.image.clip_draw(self.frame*32,0,32,32,
         self.x,self.y,70,70)
 
-        
-    
     #핑킹 애니메이션 관리
     def update(self):
 
         self.x += self.dir * self.speed
-
         self.animation_time += 0.01
 
-        if self.speed == 0:
+    #각 상태 애니메이션 관리(delay랑 프레임 수 입력)   
+        if self.is_attack:
+            frame_count = 6
+            frame_delay = 0.06
+
+        elif self.speed == 0:
             frame_count = 4
             frame_delay = 0.15
+
         else:
             frame_count = 6
-            frame_delay = 0.08
+            frame_delay = 0.08 
 
-        # 일정 시간이 지나면 프레임 변경
         if self.animation_time >= frame_delay:
-            self.frame = (self.frame + 1) % frame_count
+            self.frame += 1
             self.animation_time = 0
 
+        if self.is_attack and self.frame >= 6:
+            self.is_attack = False
+            self.frame = 0
+        elif not self.is_attack:
+            self.frame %= frame_count
+
+    #공격
     def attack(self):
+        if not self.is_attack:
+            self.is_attack=True
+            self.frame=0
+            self.animation_time=0
         pass
 
    
