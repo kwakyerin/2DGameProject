@@ -6,6 +6,7 @@ class Pink:
         self.Idle_image=load_image('Pink/Pink_Idle.png')
         self.Run_image=load_image('Pink/Pink_Run.png')
         self.Attack_image=load_image('Pink/Pink_Attack2.png')
+        self.Jump_image=load_image('Pink/Pink_Jump.png')
         
         self.x=35
         self.y=100
@@ -13,6 +14,12 @@ class Pink:
         self.frame=0
         self.speed=0
         self.dir=1
+
+        #점프 관리 변수  
+        self.ground_y=35 #착지 바닥 높이
+        self.vy=0 #캐릭터 수직 속도
+        self.gravity=0.5
+        self.jump_power=10
 
         self.is_attack=False
 
