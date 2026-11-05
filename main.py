@@ -32,15 +32,17 @@ def handle_events():
             if event.key==SDLK_ESCAPE:
                 running=False
             elif event.key==SDLK_a:
-                pink.dir-=1
+                pink.dir=-1
+                pink.speed=3
             elif event.key==SDLK_d:
-                pink.dir+=1
+                pink.dir=1
+                pink.speed=3
 
         elif event.type==SDL_KEYUP:
-            if event.key==SDLK_a:
-                pink.dir+=1
-            elif event.key==SDLK_d:
-                pink.dir-=1                    
+            if event.key==SDLK_a and pink.dir==-1:
+                pink.speed=0
+            elif event.key==SDLK_d and pink.dir==1:
+                pink.speed=0                   
 
 
 open_canvas()

@@ -9,8 +9,8 @@ class Pink:
         self.y=35
 
         self.frame=0
-        self.speed=3
-        self.dir=0
+        self.speed=0
+        self.dir=1
 
         # 애니메이션 시간 초기화
         self.animation_time = 0
@@ -18,12 +18,19 @@ class Pink:
     #핑킹 그리기
     def draw(self):
 
-        if self.dir==0:
-            self.image=self.Idle_image
+        if self.speed == 0:
+            self.image = self.Idle_image
         else:
-            self.image=self.Run_image
+            self.image = self.Run_image
 
-        self.image.clip_draw(self.frame*32,0,32,32,self.x,self.y,70,70)
+        if self.dir<0:
+            self.image.clip_composite_draw(self.frame*32,0,32,32,
+        0,'h',self.x,self.y,70,70)
+        else:
+            self.image.clip_draw(self.frame*32,0,32,32,
+        self.x,self.y,70,70)
+
+        
     
     #핑킹 애니메이션 관리
     def update(self):
@@ -32,7 +39,7 @@ class Pink:
 
         self.animation_time += 0.01
 
-        if self.dir == 0:
+        if self.speed == 0:
             frame_count = 4
             frame_delay = 0.15
         else:
