@@ -43,7 +43,8 @@ def handle_events():
                 pink.frame=0
                 pink.is_attack=False
             elif event.key==SDLK_j:
-                pink.attack()    
+                pink.attack()
+                pink.speed=0    
 
         elif event.type==SDL_KEYUP:
             if event.key==SDLK_a and pink.dir==-1:
