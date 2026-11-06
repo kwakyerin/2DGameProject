@@ -9,7 +9,7 @@ class Pink:
         self.Jump_image=load_image('Pink/Pink_Jump.png')
         
         self.x=35
-        self.y=100
+        self.y=35
 
         self.frame=0
         self.speed=0
