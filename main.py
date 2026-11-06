@@ -46,7 +46,13 @@ def handle_events():
                 pink.attack()
                 pink.speed=0
             elif event.key==SDLK_w:
-                pink.jump()        
+                pink.jump()
+            elif event.key==SDLK_1:
+                pass
+            elif event.key==SDLK_2:
+                pass
+            elif event.key==SDLK_3:
+                pass                
 
         elif event.type==SDL_KEYUP:
             if event.key==SDLK_a and pink.dir==-1:
