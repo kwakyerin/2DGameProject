@@ -49,6 +49,15 @@ class Pink:
         self.x += self.dir * self.speed
         self.animation_time += 0.01
 
+        #점프/중력 처리
+        self.y += self.vy
+        self.vy -= self.gravity
+
+        #바닥 착지 설정
+        if self.y <= self.ground_y:
+           self.y = self.ground_y
+           self.vy = 0
+
     #각 상태 애니메이션 관리(delay랑 프레임 수 입력)   
         if self.is_attack:
             frame_count = 6
@@ -78,6 +87,11 @@ class Pink:
             self.is_attack=True
             self.frame=0
             self.animation_time=0
+
+    #점프
+    def jump(self):     
+        if self.y<=self.ground_y: #먼저 캐릭터가 바닥에 있는지 확인
+            self.vy=self.jump_power #수직 속도 이용해서 점프
         pass
 
    
