@@ -2,7 +2,7 @@ from pico2d import load_image
 
 class transform_effect:
     def __init__(self,x,y):
-        self.image=load_image('Effect/Change_Light.png')
+        self.image=load_image('Effect/change.png')
         self.x=x
         self.y=y
 
@@ -34,10 +34,11 @@ class transform_effect:
         if not self.is_active:
             return
 
-        frame_width = 271
-        frame_height = 724
+        frame_width = 209
+        frame_top = 320
+        frame_height = 300
 
         self.image.clip_draw(
-            self.frame * frame_width, 0, frame_width, frame_height,
-            self.x, self.y, 100, 270)
+            self.frame * frame_width, frame_top, frame_width, frame_height,
+            self.x, self.y, 140, 200)
         pass
