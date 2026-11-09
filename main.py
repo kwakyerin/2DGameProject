@@ -1,13 +1,16 @@
 from pico2d import*
+from transform_effect import transform_effect
 from Pink import Pink
 from Blue import Blue
 from Yellow import Yellow
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character
+    global running,character,transformeffect
+
     running=True
     character=Pink()
+    transformeffect=transform_effect()
     pass
 
 #게임 상태 업데이트
@@ -18,6 +21,7 @@ def update_world():
 #화면에 그리기
 def render_world():
     clear_canvas()
+    transformeffect.draw()
     character.draw()
     update_canvas()
 
