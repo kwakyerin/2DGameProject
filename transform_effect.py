@@ -5,6 +5,10 @@ class transform_effect:
         self.image=load_image('Effect/Change_Light.png')
         self.x=400
         self.y=300
+
+        self.frame=0
+        self.animation_time=0
+        self.frame_delay=0.07
         pass
 
     def update(self):
