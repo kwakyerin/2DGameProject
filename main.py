@@ -1,27 +1,29 @@
 from pico2d import*
 from Pink import Pink
+from Blue import Blue
+from Yellow import Yellow
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,pink
+    global running,character
     running=True
-    pink=Pink()
+    character=Pink()
     pass
 
 #게임 상태 업데이트
 def update_world():
-    pink.update()
+    character.update()
     pass
 
 #화면에 그리기
 def render_world():
     clear_canvas()
-    pink.draw()
+    character.draw()
     update_canvas()
 
-#컨트롤 관리(현재는 esc키만 연결)
+#컨트롤 관리
 def handle_events():
-    global running
+    global running, character
 
     event_list = get_events()
 
@@ -33,34 +35,34 @@ def handle_events():
             if event.key==SDLK_ESCAPE:
                 running=False
             elif event.key==SDLK_a:
-                pink.dir=-1
-                pink.speed=3
-                pink.frame=0
-                pink.is_attack=False
+                character.dir=-1
+                character.speed=3
+                character.frame=0
+                character.is_attack=False
             elif event.key==SDLK_d:
-                pink.dir=1
-                pink.speed=3
-                pink.frame=0
-                pink.is_attack=False
+                character.dir=1
+                character.speed=3
+                character.frame=0
+                character.is_attack=False
             elif event.key==SDLK_j:
-                pink.attack()
-                pink.speed=0
+                character.attack()
+                character.speed=0
             elif event.key==SDLK_w:
-                pink.jump()
+                character.jump()
             elif event.key==SDLK_1:
-                pass
+                character=Pink()
             elif event.key==SDLK_2:
-                pass
+                character=Blue()
             elif event.key==SDLK_3:
-                pass                
+                character=Yellow()
 
         elif event.type==SDL_KEYUP:
-            if event.key==SDLK_a and pink.dir==-1:
-                pink.speed=0
-                pink.frame=0
-            elif event.key==SDLK_d and pink.dir==1:
-                pink.speed=0   
-                pink.frame=0                
+            if event.key==SDLK_a and character.dir==-1:
+                character.speed=0
+                character.frame=0
+            elif event.key==SDLK_d and character.dir==1:
+                character.speed=0
+                character.frame=0
 
 
 open_canvas()

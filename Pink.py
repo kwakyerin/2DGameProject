@@ -1,12 +1,14 @@
 from pico2d import load_image
 
 class Pink:
+    asset_name = 'Pink'
+
     #핑킹 속성 초기화
     def __init__(self):
-        self.Idle_image=load_image('Pink/Pink_Idle.png')
-        self.Run_image=load_image('Pink/Pink_Run.png')
-        self.Attack_image=load_image('Pink/Pink_Attack2.png')
-        self.Jump_image=load_image('Pink/Pink_Jump.png')
+        self.Idle_image=load_image(f'{self.asset_name}/{self.asset_name}_Idle.png')
+        self.Run_image=load_image(f'{self.asset_name}/{self.asset_name}_Run.png')
+        self.Attack_image=load_image(f'{self.asset_name}/{self.asset_name}_Attack2.png')
+        self.Jump_image=load_image(f'{self.asset_name}/{self.asset_name}_Jump.png')
         
         self.x=35
         self.y=35
