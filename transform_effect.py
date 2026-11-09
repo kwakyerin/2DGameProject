@@ -1,10 +1,10 @@
 from pico2d import load_image
 
 class transform_effect:
-    def __init__(self):
+    def __init__(self,x,y):
         self.image=load_image('Effect/Change_Light.png')
-        self.x=400
-        self.y=300
+        self.x=x
+        self.y=y
 
         self.frame=0
         self.animation_time=0

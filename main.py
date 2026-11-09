@@ -10,12 +10,16 @@ def reset_world():
 
     running=True
     character=Pink()
-    transformeffect=transform_effect()
+    transformeffect=transform_effect(character.x,character.y)
     pass
 
 #게임 상태 업데이트
 def update_world():
     character.update()
+
+    transformeffect.x=character.x
+    transformeffect.y=character.y
+    
     transformeffect.update()
     pass
 
