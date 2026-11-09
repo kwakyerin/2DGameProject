@@ -87,7 +87,7 @@ def handle_events():
                 character.frame=0
 
 
-open_canvas()
+open_canvas(1100,650)
 
 reset_world()
 
