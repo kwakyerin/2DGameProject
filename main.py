@@ -21,6 +21,18 @@ def render_world():
     character.draw()
     update_canvas()
 
+#캐릭터를 바꿀 때 현재 플레이 상태 유지
+def transform_character(character_class):
+    global character
+
+    previous_character = character
+    character = character_class()
+    for attribute in (
+        'x', 'y', 'frame', 'speed', 'dir', 'ground_y', 'vy',
+        'gravity', 'jump_power', 'is_attack', 'animation_time'
+    ):
+        setattr(character, attribute, getattr(previous_character, attribute))
+
 #컨트롤 관리
 def handle_events():
     global running, character
@@ -50,11 +62,11 @@ def handle_events():
             elif event.key==SDLK_w:
                 character.jump()
             elif event.key==SDLK_1:
-                character=Pink()
+                transform_character(Pink)
             elif event.key==SDLK_2:
-                character=Blue()
+                transform_character(Blue)
             elif event.key==SDLK_3:
-                character=Yellow()
+                transform_character(Yellow)
 
         elif event.type==SDL_KEYUP:
             if event.key==SDLK_a and character.dir==-1:
