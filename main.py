@@ -16,6 +16,7 @@ def reset_world():
 #게임 상태 업데이트
 def update_world():
     character.update()
+    transformeffect.update()
     pass
 
 #화면에 그리기
