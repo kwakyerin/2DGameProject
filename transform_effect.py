@@ -25,5 +25,5 @@ class transform_effect:
 
         self.image.clip_draw(
             self.frame * frame_width, 0, frame_width, frame_height,
-            self.x, self.y, 120, 320)
+            self.x, self.y, 100, 270)
         pass
