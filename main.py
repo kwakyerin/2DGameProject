@@ -41,6 +41,7 @@ def transform_character(character_class):
         'gravity', 'jump_power', 'is_attack', 'animation_time'
     ):
         setattr(character, attribute, getattr(previous_character, attribute))
+    transformeffect.start()
 
 #컨트롤 관리
 def handle_events():

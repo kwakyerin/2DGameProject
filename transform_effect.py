@@ -9,17 +9,31 @@ class transform_effect:
         self.frame=0
         self.animation_time=0
         self.frame_delay=0.07
+        self.is_active=False
         pass
 
+    def start(self):
+        self.frame=0
+        self.animation_time=0
+        self.is_active=True
+
     def update(self):
+        if not self.is_active:
+            return
+
         self.animation_time += 0.01
 
         if self.animation_time >= self.frame_delay:
-         self.frame = (self.frame + 1) % 8
-         self.animation_time = 0
+            self.frame += 1
+            self.animation_time = 0
+            if self.frame >= 8:
+                self.is_active=False
         pass
 
     def draw(self):
+        if not self.is_active:
+            return
+
         frame_width = 271
         frame_height = 724
 
