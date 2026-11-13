@@ -7,6 +7,7 @@ class stage_02:
         self.Tile_02=load_image('Map_02/Blue_Cloud/BCloud_04.png')
         self.Tile_03=load_image('Map_02/Blue_Cloud/BCloud_05.png')
         self.Tile_04=load_image('Map_02/Blue_Cloud/BCloud_02.png')
+        self.Tile_05=load_image('Map_02/Blue_Cloud/BCloud_01.png')
         pass
 
     def draw(self):
@@ -15,9 +16,13 @@ class stage_02:
         self.Tile_02.draw(400,200,150,50)
         self.Tile_03.draw(50,320,500,50)
         self.Tile_01.draw(420,420,100,50)
-        self.Tile_04.draw(580,320,80,50)
+        self.Tile_04.draw(580,280,80,50)
         self.Tile_01.draw(700,150,100,50)
         self.Tile_02.draw(880,300,150,50)
+        self.Tile_03.draw(900,550,500,50)
+        self.Tile_02.draw(80,500,150,50)
+        self.Tile_05.draw(230,600,50,50)
+        self.Tile_05.draw(600,490,50,50)
         pass
 
     def update(self):
