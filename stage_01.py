@@ -8,24 +8,49 @@ class stage_01:
         self.tile_04=load_image('Map_01/Green_Grass/Tile_04.png')
         self.tile_05=load_image('Map_01/Green_Grass/Tile_05.png')
         self.platforms = [
-            (530, 1068, 489),
-            (322, 565, 381),
-            (38, 361, 280),
-            (416, 983, 134),
-            (-46, 1146, 39),
+            {
+                'image': self.tile_01,
+                'x': 550, 'y': 0, 'width': 1250, 'height': 367,
+                'collision_left': -596, 'collision_right': 596,
+                'collision_top': 39,
+            },
+            {
+                'image': self.tile_04,
+                'x': 200, 'y': 250, 'width': 400, 'height': 200,
+                'collision_left': -162, 'collision_right': 161,
+                'collision_top': 30,
+            },
+            {
+                'image': self.tile_05,
+                'x': 450, 'y': 350, 'width': 400, 'height': 200,
+                'collision_left': -128, 'collision_right': 115,
+                'collision_top': 31,
+            },
+            {
+                'image': self.tile_02,
+                'x': 800, 'y': 450, 'width': 600, 'height': 250,
+                'collision_left': -270, 'collision_right': 268,
+                'collision_top': 39,
+            },
+            {
+                'image': self.tile_05,
+                'x': 700, 'y': 100, 'width': 400, 'height': 200,
+                'collision_left': -70, 'collision_right': 70,
+                'collision_top': 27,
+            },
         ]
         pass
 
     def draw(self):
-        self.tile_01.draw(550, 0, 1250, 367)
-        self.tile_03.draw(700, 100, 600, 230)
-        self.tile_04.draw(200,250,400,200)
-        self.tile_05.draw(450,350,400,200)
-        self.tile_02.draw(800,450,600,250)
+        for platform in self.platforms:
+            platform['image'].draw(
+                platform['x'], platform['y'],
+                platform['width'], platform['height']
+            )
         pass
 
     def resolve_character_collision(self, character, previous_y):
-        half_width = 30
+        half_width = 25
         half_height = 35
         previous_bottom = previous_y - half_height
         current_bottom = character.y - half_height
@@ -34,7 +59,14 @@ class stage_01:
         if character.vy > 0:
             return
 
-        for left, right, top in self.platforms:
+        for platform in sorted(
+            self.platforms,
+            key=lambda item: item['y'] + item['collision_top'],
+            reverse=True
+        ):
+            left = platform['x'] + platform['collision_left']
+            right = platform['x'] + platform['collision_right']
+            top = platform['y'] + platform['collision_top']
             overlaps_horizontally = (
                 character.x + half_width > left
                 and character.x - half_width < right
