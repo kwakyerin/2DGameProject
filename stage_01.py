@@ -10,24 +10,25 @@ class stage_01:
         self.platforms = [
             (530, 1068, 489),
             (322, 565, 381),
-            (39, 361, 280),
-            (416, 983, 184),
+            (38, 361, 280),
+            (416, 983, 134),
             (-46, 1146, 39),
         ]
         pass
 
     def draw(self):
         self.tile_01.draw(550, 0, 1250, 367)
-        self.tile_03.draw(700, 150, 600, 230)
+        self.tile_03.draw(700, 100, 600, 230)
         self.tile_04.draw(200,250,400,200)
         self.tile_05.draw(450,350,400,200)
         self.tile_02.draw(800,450,600,250)
         pass
 
     def resolve_character_collision(self, character, previous_y):
-        half_size = 35
-        previous_bottom = previous_y - half_size
-        current_bottom = character.y - half_size
+        half_width = 30
+        half_height = 35
+        previous_bottom = previous_y - half_height
+        current_bottom = character.y - half_height
         character.on_ground = False
 
         if character.vy > 0:
@@ -35,15 +36,15 @@ class stage_01:
 
         for left, right, top in self.platforms:
             overlaps_horizontally = (
-                character.x + half_size > left
-                and character.x - half_size < right
+                character.x + half_width > left
+                and character.x - half_width < right
             )
             crossed_platform_top = (
                 previous_bottom >= top >= current_bottom
             )
 
             if overlaps_horizontally and crossed_platform_top:
-                character.y = top + half_size
+                character.y = top + half_height
                 character.vy = 0
                 character.on_ground = True
                 return
