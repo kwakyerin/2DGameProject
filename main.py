@@ -3,12 +3,14 @@ from transform_effect import transform_effect
 from Pink import Pink
 from Blue import Blue
 from Yellow import Yellow
+from stage_01 import stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect
+    global running,character,transformeffect,stage1
 
     running=True
+    stage1=stage_01()
     character=Pink()
     transformeffect=transform_effect(character.x,character.y)
     pass
@@ -26,6 +28,7 @@ def update_world():
 #화면에 그리기
 def render_world():
     clear_canvas()
+    stage1.draw()
     transformeffect.draw()
     character.draw()
     update_canvas()
