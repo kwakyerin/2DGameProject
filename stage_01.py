@@ -16,19 +16,19 @@ class stage_01:
             },
             {
                 'image': self.tile_04,
-                'x': 200, 'y': 250, 'width': 400, 'height': 200,
+                'x': 200, 'y': 350, 'width': 400, 'height': 200,
                 'collision_left': -162, 'collision_right': 161,
                 'collision_top': 30,
             },
             {
                 'image': self.tile_05,
-                'x': 450, 'y': 350, 'width': 400, 'height': 200,
+                'x': 480, 'y': 230, 'width': 400, 'height': 200,
                 'collision_left': -128, 'collision_right': 115,
                 'collision_top': 31,
             },
             {
                 'image': self.tile_02,
-                'x': 800, 'y': 450, 'width': 600, 'height': 250,
+                'x': 730, 'y': 450, 'width': 600, 'height': 230,
                 'collision_left': -270, 'collision_right': 268,
                 'collision_top': 39,
             },
@@ -37,7 +37,7 @@ class stage_01:
                 'x': 700, 'y': 100, 'width': 400, 'height': 200,
                 'collision_left': -70, 'collision_right': 70,
                 'collision_top': 27,
-            },
+            }
         ]
         pass
 

@@ -17,7 +17,7 @@ class Pink:
         self.on_ground = True
         self.vy = 0
         self.gravity = 0.5
-        self.jump_power = 10
+        self.jump_power = 12
 
         self.is_attack = False
         self.animation_time = 0
