@@ -17,7 +17,9 @@ def reset_world():
 
 #게임 상태 업데이트
 def update_world():
+    previous_y = character.y
     character.update()
+    stage1.resolve_character_collision(character, previous_y)
 
     transformeffect.x=character.x
     transformeffect.y=character.y
@@ -40,7 +42,7 @@ def transform_character(character_class):
     previous_character = character
     character = character_class()
     for attribute in (
-        'x', 'y', 'frame', 'speed', 'dir', 'ground_y', 'vy',
+        'x', 'y', 'frame', 'speed', 'dir', 'on_ground', 'vy',
         'gravity', 'jump_power', 'is_attack', 'animation_time'
     ):
         setattr(character, attribute, getattr(previous_character, attribute))

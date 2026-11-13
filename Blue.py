@@ -9,12 +9,12 @@ class Blue:
         self.jump_image = load_image('Blue/Blue_Jump.png')
 
         self.x = 35
-        self.y = 35
+        self.y = 74
         self.frame = 0
         self.speed = 0
         self.dir = 1
 
-        self.ground_y = 35
+        self.on_ground = True
         self.vy = 0
         self.gravity = 0.5
         self.jump_power = 10
@@ -46,10 +46,6 @@ class Blue:
         self.y += self.vy
         self.vy -= self.gravity
 
-        if self.y <= self.ground_y:
-            self.y = self.ground_y
-            self.vy = 0
-
         if self.is_attack:
             frame_count = 6
             frame_delay = 0.06
@@ -77,5 +73,6 @@ class Blue:
             self.animation_time = 0
 
     def jump(self):
-        if self.y <= self.ground_y:
+        if self.on_ground:
             self.vy = self.jump_power
+            self.on_ground = False

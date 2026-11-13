@@ -7,6 +7,13 @@ class stage_01:
         self.tile_03=load_image('Map_01/Green_Grass/Tile_03.png')
         self.tile_04=load_image('Map_01/Green_Grass/Tile_04.png')
         self.tile_05=load_image('Map_01/Green_Grass/Tile_05.png')
+        self.platforms = [
+            (530, 1068, 489),
+            (322, 565, 381),
+            (39, 361, 280),
+            (416, 983, 184),
+            (-46, 1146, 39),
+        ]
         pass
 
     def draw(self):
@@ -16,6 +23,30 @@ class stage_01:
         self.tile_05.draw(450,350,400,200)
         self.tile_02.draw(800,450,600,250)
         pass
+
+    def resolve_character_collision(self, character, previous_y):
+        half_size = 35
+        previous_bottom = previous_y - half_size
+        current_bottom = character.y - half_size
+        character.on_ground = False
+
+        if character.vy > 0:
+            return
+
+        for left, right, top in self.platforms:
+            overlaps_horizontally = (
+                character.x + half_size > left
+                and character.x - half_size < right
+            )
+            crossed_platform_top = (
+                previous_bottom >= top >= current_bottom
+            )
+
+            if overlaps_horizontally and crossed_platform_top:
+                character.y = top + half_size
+                character.vy = 0
+                character.on_ground = True
+                return
 
     def update(self):
         pass
