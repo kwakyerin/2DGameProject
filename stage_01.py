@@ -11,9 +11,10 @@ class stage_01:
 
     def draw(self):
         self.tile_01.draw(550, 0, 1250, 367)
-        self.tile_02.draw(700, 150, 600, 230)
-        self.tile_05.draw(300,250,400,200)
-        self.tile_05.draw(500,400,400,200)
+        self.tile_03.draw(700, 150, 600, 230)
+        self.tile_04.draw(200,250,400,200)
+        self.tile_05.draw(450,350,400,200)
+        self.tile_02.draw(800,450,600,250)
         pass
 
     def update(self):
