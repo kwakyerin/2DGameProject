@@ -6,10 +6,11 @@ from Yellow import Yellow
 from stage_01 import stage_01
 from stage_01_1 import stage_01_1
 from stage_02 import stage_02
+from stage_02_1 import stage_02_1
 
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
-STAGES = (stage_01, stage_01_1, stage_02)
+STAGES = (stage_01, stage_01_1, stage_02, stage_02_1)
 START_STAGE = stage_02
 
 #월드 구성하는 객체들 초기화

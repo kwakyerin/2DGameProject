@@ -9,3 +9,6 @@ class stage_02_1:
 
     def update(self):
         pass
+
+    def resolve_character_collision(self, character, previous_y):
+        character.on_ground = False
