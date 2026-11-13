@@ -4,7 +4,6 @@ class stage_01:
     def __init__(self):
         self.tile_01=load_image('Map_01/Green_Grass/Tile_01.png')
         self.tile_02=load_image('Map_01/Green_Grass/Tile_02.png')
-        self.tile_03=load_image('Map_01/Green_Grass/Tile_03.png')
         self.tile_04=load_image('Map_01/Green_Grass/Tile_04.png')
         self.tile_05=load_image('Map_01/Green_Grass/Tile_05.png')
         self.platforms = [

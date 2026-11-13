@@ -12,7 +12,6 @@ class stage_01_1:
                 'collision_top': 39,
             },
         ]
-        pass
 
     def draw(self):
         for platform in self.platforms:
@@ -20,7 +19,6 @@ class stage_01_1:
                 platform['x'], platform['y'],
                 platform['width'], platform['height']
             )
-        pass
 
     def update(self):
         pass
@@ -30,9 +28,6 @@ class stage_01_1:
         half_width = 25
         half_height = 35
 
-        if character.vy > 0:
-            return
-
         previous_bottom = previous_y - half_height
         current_bottom = character.y - half_height
 
@@ -40,15 +35,13 @@ class stage_01_1:
             left = platform['x'] + platform['collision_left']
             right = platform['x'] + platform['collision_right']
             top = platform['y'] + platform['collision_top']
-            overlaps_horizontally = (
-                character.x + half_width > left
-                and character.x - half_width < right
-            )
-            crossed_platform_top = (
-                previous_bottom >= top >= current_bottom
-            )
 
-            if overlaps_horizontally and crossed_platform_top:
+            if (
+                character.vy <= 0
+                and character.x + half_width > left
+                and character.x - half_width < right
+                and previous_bottom >= top >= current_bottom
+            ):
                 character.y = top + half_height
                 character.vy = 0
                 character.on_ground = True
