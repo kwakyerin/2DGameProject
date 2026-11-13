@@ -8,6 +8,68 @@ class stage_02:
         self.Tile_03=load_image('Map_02/Blue_Cloud/BCloud_05.png')
         self.Tile_04=load_image('Map_02/Blue_Cloud/BCloud_02.png')
         self.Tile_05=load_image('Map_02/Blue_Cloud/BCloud_01.png')
+        self.platforms = [
+            {
+                'x': 30, 'y': 0, 'width': 400, 'height': 200,
+                'collision_left': -200, 'collision_right': 200,
+                'collision_top': 39,
+            },
+            {
+                'x': 200, 'y': 130, 'width': 100, 'height': 50,
+                'collision_left': -50, 'collision_right': 50,
+                'collision_top': 25,
+            },
+            {
+                'x': 400, 'y': 200, 'width': 150, 'height': 50,
+                'collision_left': -75, 'collision_right': 75,
+                'collision_top': 25,
+            },
+            {
+                'x': 50, 'y': 320, 'width': 500, 'height': 50,
+                'collision_left': -250, 'collision_right': 250,
+                'collision_top': 25,
+            },
+            {
+                'x': 420, 'y': 420, 'width': 100, 'height': 50,
+                'collision_left': -50, 'collision_right': 50,
+                'collision_top': 25,
+            },
+            {
+                'x': 580, 'y': 280, 'width': 80, 'height': 50,
+                'collision_left': -40, 'collision_right': 40,
+                'collision_top': 25,
+            },
+            {
+                'x': 700, 'y': 150, 'width': 100, 'height': 50,
+                'collision_left': -50, 'collision_right': 50,
+                'collision_top': 25,
+            },
+            {
+                'x': 880, 'y': 300, 'width': 150, 'height': 50,
+                'collision_left': -75, 'collision_right': 75,
+                'collision_top': 25,
+            },
+            {
+                'x': 900, 'y': 550, 'width': 500, 'height': 50,
+                'collision_left': -250, 'collision_right': 250,
+                'collision_top': 25,
+            },
+            {
+                'x': 80, 'y': 500, 'width': 150, 'height': 50,
+                'collision_left': -75, 'collision_right': 75,
+                'collision_top': 25,
+            },
+            {
+                'x': 230, 'y': 600, 'width': 50, 'height': 50,
+                'collision_left': -25, 'collision_right': 25,
+                'collision_top': 25,
+            },
+            {
+                'x': 600, 'y': 490, 'width': 50, 'height': 50,
+                'collision_left': -25, 'collision_right': 25,
+                'collision_top': 25,
+            },
+        ]
         pass
 
     def draw(self):
@@ -29,4 +91,33 @@ class stage_02:
         pass
 
     def resolve_character_collision(self, character, previous_y):
+        half_width = 25
+        half_height = 35
+        previous_bottom = previous_y - half_height
+        current_bottom = character.y - half_height
         character.on_ground = False
+
+        if character.vy > 0:
+            return
+
+        for platform in sorted(
+            self.platforms,
+            key=lambda item: item['y'] + item['collision_top'],
+            reverse=True
+        ):
+            left = platform['x'] + platform['collision_left']
+            right = platform['x'] + platform['collision_right']
+            top = platform['y'] + platform['collision_top']
+            overlaps_horizontally = (
+                character.x + half_width > left
+                and character.x - half_width < right
+            )
+            crossed_platform_top = (
+                previous_bottom >= top >= current_bottom
+            )
+
+            if overlaps_horizontally and crossed_platform_top:
+                character.y = top + half_height
+                character.vy = 0
+                character.on_ground = True
+                return
