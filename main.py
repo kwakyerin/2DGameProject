@@ -28,6 +28,7 @@ def reset_world():
 def update_world():
     global stage1,stage_index
 
+    previous_x = character.x
     previous_y = character.y
     character.update()
 
@@ -36,17 +37,21 @@ def update_world():
             stage_index += 1
             stage1 = STAGES[stage_index]()
             character.x = SCREEN_EDGE
+            previous_x = character.x
         else:
             character.x = SCREEN_WIDTH - SCREEN_EDGE
+            previous_x = character.x
     elif character.x <= SCREEN_EDGE:
         if stage_index > 0:
             stage_index -= 1
             stage1 = STAGES[stage_index]()
             character.x = SCREEN_WIDTH - SCREEN_EDGE
+            previous_x = character.x
         else:
             character.x = SCREEN_EDGE
+            previous_x = character.x
 
-    stage1.resolve_character_collision(character, previous_y)
+    stage1.resolve_character_collision(character, previous_x, previous_y)
 
     transformeffect.x=character.x
     transformeffect.y=character.y
