@@ -9,13 +9,14 @@ from stage_01_1 import stage_01_1
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 STAGES = (stage_01, stage_01_1)
+START_STAGE = stage_01_1
 
 #월드 구성하는 객체들 초기화
 def reset_world():
     global running,character,transformeffect,stage1,stage_index
 
     running=True
-    stage_index=0
+    stage_index=STAGES.index(START_STAGE)
     stage1=STAGES[stage_index]()
     character=Pink()
     transformeffect=transform_effect(character.x,character.y)
