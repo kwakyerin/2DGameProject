@@ -4,21 +4,45 @@ from Pink import Pink
 from Blue import Blue
 from Yellow import Yellow
 from stage_01 import stage_01
+from stage_01_1 import stage_01_1
+
+SCREEN_WIDTH = 1100
+SCREEN_EDGE = 25
+STAGES = (stage_01, stage_01_1)
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect,stage1
+    global running,character,transformeffect,stage1,stage_index
 
     running=True
-    stage1=stage_01()
+    stage_index=0
+    stage1=STAGES[stage_index]()
     character=Pink()
     transformeffect=transform_effect(character.x,character.y)
     pass
 
 #게임 상태 업데이트
 def update_world():
+    global stage1,stage_index
+
     previous_y = character.y
     character.update()
+
+    if character.x >= SCREEN_WIDTH - SCREEN_EDGE:
+        if stage_index < len(STAGES) - 1:
+            stage_index += 1
+            stage1 = STAGES[stage_index]()
+            character.x = SCREEN_EDGE
+        else:
+            character.x = SCREEN_WIDTH - SCREEN_EDGE
+    elif character.x <= SCREEN_EDGE:
+        if stage_index > 0:
+            stage_index -= 1
+            stage1 = STAGES[stage_index]()
+            character.x = SCREEN_WIDTH - SCREEN_EDGE
+        else:
+            character.x = SCREEN_EDGE
+
     stage1.resolve_character_collision(character, previous_y)
 
     transformeffect.x=character.x
@@ -92,7 +116,7 @@ def handle_events():
                 character.frame=0
 
 
-open_canvas(1100,650)
+open_canvas(SCREEN_WIDTH,650)
 
 reset_world()
 
