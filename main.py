@@ -11,7 +11,7 @@ from stage_02_1 import stage_02_1
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1)
-START_STAGE = stage_02
+START_STAGE = stage_02_1
 
 #월드 구성하는 객체들 초기화
 def reset_world():
