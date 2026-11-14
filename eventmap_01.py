@@ -12,6 +12,7 @@ class eventmap_01:
         self.Tile_02.draw(600,300,200,80)
         self.Tile_02.draw(10,500,200,80)
         self.Tile_03.draw(750,200,200,80)
+        self.Tile_03.draw(1000,600,200,80)
         pass
 
     def update(self):
