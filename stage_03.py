@@ -8,6 +8,7 @@ class stage_03:
         self.Tile_04=load_image('Map_03/purple_space/P_Tile_08.png')
         self.Tile_05=load_image('Map_03/purple_space/P_Tile_03.png')
         self.Tile_06=load_image('Map_03/purple_space/P_Tile_02.png')
+        self.Tile_07=load_image('Map_03/purple_space/P_Tile_08.png')
         pass
 
     def draw(self):
@@ -17,6 +18,7 @@ class stage_03:
         self.Tile_04.draw(50,200,150,100)
         self.Tile_05.draw(800,400,150,100)
         self.Tile_06.draw(950,500,230,100)
+        self.Tile_07.draw(330,150,150,100)
         pass
 
     def update(self):
