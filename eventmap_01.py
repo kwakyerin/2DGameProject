@@ -5,6 +5,8 @@ class eventmap_01:
         self.Tile_01=load_image('Event_Map/Pink.png')
         self.Tile_02=load_image('Event_Map/Blue.png')
         self.Tile_03=load_image('Event_Map/Yellow.png')
+        self.Tile_04=load_image('Map_03/purple_space/P_Tile_10.png')
+        self.Tile_05=load_image('Map_03/gray_space/G_Tile_10.png')
         pass
 
     def draw(self):
@@ -21,8 +23,10 @@ class eventmap_01:
         self.Tile_01.draw(200,580,250,130)
         self.Tile_02.draw(1000,430,200,80)
         self.Tile_03.draw(190,660,200,80)
-        self.Tile_02.draw(200,60,200,80)
+        #self.Tile_02.draw(200,60,200,80)
         self.Tile_03.draw(370,200,200,80)
+        self.Tile_04.draw(0,50,500,150)
+        self.Tile_05.draw(1200,50,500,150)
         pass
 
     def update(self):
