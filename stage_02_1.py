@@ -6,6 +6,7 @@ class stage_02_1:
         self.Tile_02=load_image('Map_02/Purple_Cloud/PCloud_05.png')
         self.Tile_03=load_image('Map_02/Purple_Cloud/PCloud_02.png')
         self.Tile_04=load_image('Map_02/Purple_Cloud/PCloud_03.png')
+        self.Tile_05=load_image('Map_02/Space/P_Tile_10.png')
         pass
 
     def draw(self):
@@ -15,6 +16,7 @@ class stage_02_1:
         self.Tile_02.draw(600,200,500,50)
         self.Tile_04.draw(200,50,130,50)
         self.Tile_04.draw(100,140,130,50)
+        self.Tile_05.draw(1200,10,500,150)
         pass
 
     def update(self):
