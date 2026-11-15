@@ -1,12 +1,23 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 
 class bossmap:
     def __init__(self):
         self.image=load_image('Map_03/gray_space/G_Tile_11.png')
+        
+        self.left = 0
+        self.right = 1100
+        self.bottom = 0
+        self.top = 40
+        
         pass
 
     def draw(self):
         self.image.draw(550,10,1200,300)
+
+        #빨간색 충돌 박스
+        draw_rectangle(self.left,self.bottom,self.right,self.top,
+            255, 0, 0
+        )
         pass
 
     def update(self):
