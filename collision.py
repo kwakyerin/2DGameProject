@@ -26,3 +26,30 @@ def check_collision(character, platform, previous_y):
         return True
 
     return False
+
+
+
+def check_platform_collision(character, platform, previous_y):
+    half_width = 25
+    half_height = 35
+
+    left, bottom, right, top = platform
+
+    previous_bottom = previous_y - half_height
+    current_bottom = character.y - half_height
+
+    # 좌우 범위 확인
+    if character.x + half_width <= left:
+        return False
+
+    if character.x - half_width >= right:
+        return False
+
+    # 내려오면서 발판 윗면을 통과했는지 확인
+    if character.vy <= 0 and previous_bottom >= top >= current_bottom:
+        character.y = top + half_height
+        character.vy = 0
+        character.on_ground = True
+        return True
+
+    return False
