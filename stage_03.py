@@ -1,4 +1,5 @@
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
+from collision import check_platform_collision
 
 class stage_03:
     def __init__(self):
@@ -9,20 +10,82 @@ class stage_03:
         self.Tile_05=load_image('Map_03/purple_space/P_Tile_03.png')
         self.Tile_06=load_image('Map_03/purple_space/P_Tile_02.png')
         self.Tile_07=load_image('Map_03/purple_space/P_Tile_08.png')
-        pass
+        self.platforms = [
+            {
+                'image': self.Tile_01,
+                'x': 600, 'y': 280, 'width': 300, 'height': 100,
+                'collision_width': 280, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -20,
+            },
+            {
+                'image': self.Tile_02,
+                'x': 550, 'y': 10, 'width': 1200, 'height': 300,
+                'collision_width': 1200, 'collision_height': 70,
+                'collision_offset_x': 0, 'collision_offset_y': -125,
+            },
+            {
+                'image': self.Tile_03,
+                'x': 250, 'y': 430, 'width': 500, 'height': 150,
+                'collision_width': 490, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -50,
+            },
+            {
+                'image': self.Tile_04,
+                'x': 50, 'y': 200, 'width': 150, 'height': 100,
+                'collision_width': 100, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -30,
+            },
+            {
+                'image': self.Tile_05,
+                'x': 800, 'y': 400, 'width': 150, 'height': 100,
+                'collision_width': 80, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -30,
+            },
+            {
+                'image': self.Tile_06,
+                'x': 950, 'y': 500, 'width': 230, 'height': 100,
+                'collision_width': 160, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -30,
+            },
+            {
+                'image': self.Tile_07,
+                'x': 330, 'y': 150, 'width': 150, 'height': 100,
+                'collision_width': 100, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -30,
+            },
+        ]
+
+    def _get_platform_collision_box(self, platform):
+        x = platform['x'] + platform['collision_offset_x']
+        width = platform['collision_width']
+        top = (
+            platform['y'] + platform['height'] / 2
+            + platform['collision_offset_y']
+        )
+        height = platform['collision_height']
+
+        left = x - width / 2
+        right = x + width / 2
+        bottom = top - height
+        return left, bottom, right, top
 
     def draw(self):
-        self.Tile_01.draw(600,300,300,100)
-        self.Tile_02.draw(550,10,1200,300)
-        self.Tile_03.draw(250,450,500,150)
-        self.Tile_04.draw(50,200,150,100)
-        self.Tile_05.draw(800,400,150,100)
-        self.Tile_06.draw(950,500,230,100)
-        self.Tile_07.draw(330,150,150,100)
-        pass
+        for platform in self.platforms:
+            platform['image'].draw(
+                platform['x'], platform['y'],
+                platform['width'], platform['height']
+            )
+
+            left, bottom, right, top = self._get_platform_collision_box(platform)
+            draw_rectangle(left, bottom, right, top, 255, 0, 0)
 
     def update(self):
         pass
 
-    def resolve_character_collision(self, character, previous_x, previous_y):
-        pass
+    def resolve_character_collision(self, character, _previous_x, previous_y):
+        character.on_ground = False
+
+        for platform in self.platforms:
+            box = self._get_platform_collision_box(platform)
+            if check_platform_collision(character, box, previous_y):
+                break
