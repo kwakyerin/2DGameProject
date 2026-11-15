@@ -1,6 +1,6 @@
 from pico2d import load_image
 
-class eventmap_01:
+class eventmap:
     def __init__(self):
         self.current_color=1
 

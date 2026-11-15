@@ -8,12 +8,12 @@ from stage_01_1 import stage_01_1
 from stage_02 import stage_02
 from stage_02_1 import stage_02_1
 from stage_03 import stage_03
-from eventmap_01 import eventmap_01
+from eventmap import eventmap
 
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
-STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap_01)
-START_STAGE = eventmap_01
+STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap)
+START_STAGE = eventmap
 
 #월드 구성하는 객체들 초기화
 def reset_world():
@@ -83,7 +83,7 @@ def transform_character(character_class):
     transformeffect.start()
 
     # 현재 스테이지가 색깔 타일 맵일 때만 적용
-    if isinstance(stage1, eventmap_01):
+    if isinstance(stage1, eventmap):
 
         if character_class == Pink:
             stage1.current_color = 1
