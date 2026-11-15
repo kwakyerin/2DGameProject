@@ -14,7 +14,7 @@ from bossmap import bossmap
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = stage_01
+START_STAGE = stage_01_1
 
 #월드 구성하는 객체들 초기화
 def reset_world():
