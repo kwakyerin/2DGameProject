@@ -8,7 +8,7 @@ class bossmap:
         self.left = 0
         self.right = 1100
         self.bottom = 0
-        self.top = 40
+        self.top = 10
         
         pass
 

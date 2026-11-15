@@ -97,13 +97,13 @@ class eventmap:
             },
             {
                 'image': self.Tile_04, 'color': None,
-                'x': 0, 'y': 50, 'width': 500, 'height': 150,
+                'x': 0, 'y': 10, 'width': 500, 'height': 150,
                 'collision_width': 480, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': -50,
             },
             {
                 'image': self.Tile_05, 'color': None,
-                'x': 1200, 'y': 50, 'width': 500, 'height': 150,
+                'x': 1200, 'y': 10, 'width': 500, 'height': 150,
                 'collision_width': 480, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': -50,
             },
