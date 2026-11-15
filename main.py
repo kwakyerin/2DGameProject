@@ -82,6 +82,20 @@ def transform_character(character_class):
         setattr(character, attribute, getattr(previous_character, attribute))
     transformeffect.start()
 
+    # 현재 스테이지가 색깔 타일 맵일 때만 적용
+    if isinstance(stage1, eventmap_01):
+
+        if character_class == Pink:
+            stage1.current_color = 1
+
+        elif character_class == Blue:
+            stage1.current_color = 2
+
+        elif character_class == Yellow:
+            stage1.current_color = 3
+
+    transformeffect.start()
+
 #컨트롤 관리
 def handle_events():
     global running, character
