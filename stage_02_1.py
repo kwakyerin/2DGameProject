@@ -11,7 +11,7 @@ class stage_02_1:
         self.platforms = [
             {
                 'image': self.Tile_01,
-                'x': 45, 'y': 500, 'width': 130, 'height': 50,
+                'x': 45, 'y': 550, 'width': 130, 'height': 50,
                 'collision_width': 130, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
