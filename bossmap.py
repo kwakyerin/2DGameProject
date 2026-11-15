@@ -1,4 +1,5 @@
 from pico2d import load_image, draw_rectangle
+from collision import check_collision
 
 class bossmap:
     def __init__(self):
@@ -24,4 +25,8 @@ class bossmap:
         pass
 
     def resolve_character_collision(self, character, previous_x, previous_y):
-        pass
+        character.on_ground = False
+
+        platform = (self.left, self.bottom, self.right, self.top)
+
+        check_collision(character, platform, previous_y)
