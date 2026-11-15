@@ -18,26 +18,26 @@ class stage_01:
             {
                 'image': self.tile_04,
                 'x': 200, 'y': 350, 'width': 400, 'height': 200,
-                'collision_width': 320, 'collision_height': 60,
-                'collision_offset_x': 0, 'collision_offset_y': -20,
+                'collision_width': 290, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -70,
             },
             {
                 'image': self.tile_05,
                 'x': 480, 'y': 230, 'width': 400, 'height': 200,
-                'collision_width': 320, 'collision_height': 60,
-                'collision_offset_x': 0, 'collision_offset_y': -20,
+                'collision_width': 180, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -70,
             },
             {
                 'image': self.tile_02,
                 'x': 730, 'y': 450, 'width': 600, 'height': 230,
-                'collision_width': 480, 'collision_height': 69,
-                'collision_offset_x': 0, 'collision_offset_y': -20,
+                'collision_width': 500, 'collision_height': 69,
+                'collision_offset_x': 0, 'collision_offset_y': -80,
             },
             {
                 'image': self.tile_05,
                 'x': 700, 'y': 100, 'width': 400, 'height': 200,
-                'collision_width': 320, 'collision_height': 60,
-                'collision_offset_x': 0, 'collision_offset_y': -20,
+                'collision_width': 180, 'collision_height': 50,
+                'collision_offset_x': 0, 'collision_offset_y': -70,
             }
         ]
         pass
