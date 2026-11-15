@@ -14,7 +14,7 @@ from bossmap import bossmap
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = eventmap
+START_STAGE = bossmap
 
 #월드 구성하는 객체들 초기화
 def reset_world():
@@ -87,13 +87,13 @@ def transform_character(character_class):
     if isinstance(stage1, eventmap):
 
         if character_class == Pink:
-            stage1.current_color = 1
+            stage1.change_color(1)
 
         elif character_class == Blue:
-            stage1.current_color = 2
+            stage1.change_color(2)
 
         elif character_class == Yellow:
-            stage1.current_color = 3
+            stage1.change_color(3)
 
     transformeffect.start()
 

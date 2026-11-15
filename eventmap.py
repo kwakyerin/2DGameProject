@@ -1,9 +1,11 @@
-from pico2d import load_image, draw_rectangle
+from pico2d import load_image, draw_rectangle, get_time
 from collision import check_platform_collision
 
 class eventmap:
     def __init__(self):
-        self.current_color=1
+        self.retained_colors = {}
+        self.change_time = 0
+        self.current_color = 1
 
         self.Tile_01=load_image('Event_Map/Pink.png')
         self.Tile_02=load_image('Event_Map/Blue.png')
@@ -19,7 +21,7 @@ class eventmap:
             },
             {
                 'image': self.Tile_01, 'color': 1,
-                'x': 130, 'y': 230, 'width': 250, 'height': 130,
+                'x': 130, 'y': 200, 'width': 250, 'height': 130,
                 'collision_width': 163, 'collision_height': 60,
                 'collision_offset_x': 0, 'collision_offset_y': -33,
             },
@@ -37,7 +39,7 @@ class eventmap:
             },
             {
                 'image': self.Tile_02, 'color': 2,
-                'x': 600, 'y': 300, 'width': 200, 'height': 80,
+                'x': 600, 'y': 250, 'width': 200, 'height': 80,
                 'collision_width': 165, 'collision_height': 60,
                 'collision_offset_x': 5, 'collision_offset_y': -18,
             },
@@ -55,7 +57,7 @@ class eventmap:
             },
             {
                 'image': self.Tile_02, 'color': 2,
-                'x': 350, 'y': 380, 'width': 200, 'height': 80,
+                'x': 350, 'y': 350, 'width': 200, 'height': 80,
                 'collision_width': 165, 'collision_height': 60,
                 'collision_offset_x': 5, 'collision_offset_y': -18,
             },
@@ -109,6 +111,23 @@ class eventmap:
             },
         ]
 
+    def change_color(self, color):
+        if color == self.current_color:
+            return
+
+        self.change_time = get_time()
+        self.retained_colors[self.current_color] = self.change_time + 1.0
+        self.retained_colors.pop(color, None)
+        self.current_color = color
+
+    def _is_platform_active(self, platform):
+        color = platform['color']
+        return (
+            color is None
+            or color == self.current_color
+            or color in self.retained_colors
+        )
+
     def _get_platform_collision_box(self, platform):
         x = platform['x'] + platform['collision_offset_x']
         width = platform['collision_width']
@@ -124,8 +143,10 @@ class eventmap:
         return left, bottom, right, top
 
     def draw(self):
+        self.update()
+
         for platform in self.platforms:
-            if platform['color'] is not None and platform['color'] != self.current_color:
+            if not self._is_platform_active(platform):
                 continue
 
             platform['image'].draw(
@@ -137,13 +158,21 @@ class eventmap:
             draw_rectangle(left, bottom, right, top, 255, 0, 0)
 
     def update(self):
-        pass
+        now = get_time()
+        expired_colors = [
+            color
+            for color, expiry_time in self.retained_colors.items()
+            if now >= expiry_time
+        ]
+        for color in expired_colors:
+            del self.retained_colors[color]
 
     def resolve_character_collision(self, character, _previous_x, previous_y):
+        self.update()
         character.on_ground = False
 
         for platform in self.platforms:
-            if platform['color'] is not None and platform['color'] != self.current_color:
+            if not self._is_platform_active(platform):
                 continue
 
             box = self._get_platform_collision_box(platform)
