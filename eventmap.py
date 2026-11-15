@@ -41,4 +41,4 @@ class eventmap:
         pass
 
     def resolve_character_collision(self, character, previous_x, previous_y):
-        character.on_ground = False
+        pass
