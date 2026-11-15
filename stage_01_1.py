@@ -17,32 +17,32 @@ class stage_01_1:
             {
             'image': self.Tile_02,
             'x': 550, 'y': 150, 'width': 400, 'height': 200,
-            'collision_width': 400, 'collision_height': 200,
-            'collision_offset_x': 0, 'collision_offset_y': 0,
+            'collision_width': 180, 'collision_height': 50,
+            'collision_offset_x': 0, 'collision_offset_y': -70,
             },
             {
             'image': self.Tile_03,
             'x': 220, 'y': 250, 'width': 400, 'height': 200,
-            'collision_width': 400, 'collision_height': 200,
-            'collision_offset_x': 0, 'collision_offset_y': 0,
+            'collision_width': 320, 'collision_height': 60,
+            'collision_offset_x': 0, 'collision_offset_y': -70,
             },
             {
             'image': self.Tile_03,
             'x': 900, 'y': 250, 'width': 400, 'height': 200,
-            'collision_width': 400, 'collision_height': 200,
-            'collision_offset_x': 0, 'collision_offset_y': 0,
+            'collision_width': 320, 'collision_height': 60,
+            'collision_offset_x': 0, 'collision_offset_y': -70,
             },
             {
             'image': self.Tile_02,
             'x': 500, 'y': 400, 'width': 400, 'height': 200,
-            'collision_width': 400, 'collision_height': 200,
-            'collision_offset_x': 0, 'collision_offset_y': 0,
+            'collision_width': 180, 'collision_height': 50,
+            'collision_offset_x': 0, 'collision_offset_y': -70,
             },
             {
             'image': self.Tile_02,
             'x': 800, 'y': 480, 'width': 400, 'height': 200,
-            'collision_width': 400, 'collision_height': 200,
-            'collision_offset_x': 0, 'collision_offset_y': 0,
+            'collision_width': 180, 'collision_height': 50,
+            'collision_offset_x': 0, 'collision_offset_y': -70,
             }
 
         ]
