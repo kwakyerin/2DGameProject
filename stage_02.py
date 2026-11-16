@@ -36,13 +36,13 @@ class stage_02:
             },
             {
                 'image': self.Tile_01,
-                'x': 460, 'y': 500, 'width': 100, 'height': 50,
+                'x': 580, 'y': 550, 'width': 100, 'height': 50,
                 'collision_width': 100, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
             {
                 'image': self.Tile_04,
-                'x': 150, 'y': 500, 'width': 80, 'height': 50,
+                'x': 270, 'y': 610, 'width': 80, 'height': 50,
                 'collision_width': 80, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
@@ -66,13 +66,13 @@ class stage_02:
             },
             {
                 'image': self.Tile_05,
-                'x': 230, 'y': 600, 'width': 50, 'height': 50,
+                'x': 400, 'y': 300, 'width': 50, 'height': 50,
                 'collision_width': 50, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
             {
                 'image': self.Tile_05,
-                'x': 600, 'y': 490, 'width': 50, 'height': 50,
+                'x': 750, 'y': 600, 'width': 50, 'height': 50,
                 'collision_width': 50, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
