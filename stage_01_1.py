@@ -74,10 +74,10 @@ class stage_01_1:
     def update(self):
         pass
 
-    def resolve_character_collision(self, character, _previous_x, previous_y):
+    def resolve_character_collision(self, character, previous_x, previous_y):
         character.on_ground = False
 
         for platform in self.platforms:
             box = self._get_platform_collision_box(platform)
-            if check_platform_collision(character, box, previous_y):
+            if check_platform_collision(character, box, previous_x, previous_y):
                 break

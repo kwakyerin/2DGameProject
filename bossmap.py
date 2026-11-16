@@ -29,4 +29,4 @@ class bossmap:
 
         platform = (self.left, self.bottom, self.right, self.top)
 
-        check_collision(character, platform, previous_y)
+        check_collision(character, platform, previous_x, previous_y)

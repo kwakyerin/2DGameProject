@@ -68,12 +68,12 @@ class stage_01:
             left, bottom, right, top = self._get_platform_collision_box(platform)
             draw_rectangle(left, bottom, right, top, 255, 0, 0)
 
-    def resolve_character_collision(self, character, _previous_x, previous_y):
+    def resolve_character_collision(self, character, previous_x, previous_y):
         character.on_ground = False
 
         for platform in self.platforms:
             box = self._get_platform_collision_box(platform)
-            if check_platform_collision(character, box, previous_y):
+            if check_platform_collision(character, box, previous_x, previous_y):
                 break
 
     def update(self):

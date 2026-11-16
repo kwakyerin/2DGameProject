@@ -167,7 +167,7 @@ class eventmap:
         for color in expired_colors:
             del self.retained_colors[color]
 
-    def resolve_character_collision(self, character, _previous_x, previous_y):
+    def resolve_character_collision(self, character, previous_x, previous_y):
         self.update()
         character.on_ground = False
 
@@ -176,5 +176,5 @@ class eventmap:
                 continue
 
             box = self._get_platform_collision_box(platform)
-            if check_platform_collision(character, box, previous_y):
+            if check_platform_collision(character, box, previous_x, previous_y):
                 break

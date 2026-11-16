@@ -10,11 +10,12 @@ from stage_02_1 import stage_02_1
 from stage_03 import stage_03
 from eventmap import eventmap
 from bossmap import bossmap
+from collision import CHARACTER_HALF_HEIGHT, CHARACTER_HALF_WIDTH
 
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = bossmap
+START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
@@ -68,6 +69,13 @@ def render_world():
     stage1.draw()
     transformeffect.draw()
     character.draw()
+    draw_rectangle(
+        character.x - CHARACTER_HALF_WIDTH,
+        character.y - CHARACTER_HALF_HEIGHT,
+        character.x + CHARACTER_HALF_WIDTH,
+        character.y + CHARACTER_HALF_HEIGHT,
+        255, 0, 0
+    )
     update_canvas()
 
 #캐릭터를 바꿀 때 현재 플레이 상태 유지
