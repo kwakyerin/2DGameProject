@@ -11,13 +11,13 @@ class stage_02_1:
         self.platforms = [
             {
                 'image': self.Tile_01,
-                'x': 45, 'y': 550, 'width': 130, 'height': 50,
+                'x': 560, 'y': 450, 'width': 130, 'height': 50,
                 'collision_width': 130, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
             {
                 'image': self.Tile_02,
-                'x': 300, 'y': 400, 'width': 500, 'height': 50,
+                'x': 0, 'y': 300, 'width': 500, 'height': 50,
                 'collision_width': 500, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
@@ -29,7 +29,7 @@ class stage_02_1:
             },
             {
                 'image': self.Tile_02,
-                'x': 600, 'y': 200, 'width': 500, 'height': 50,
+                'x': 600, 'y': 150, 'width': 500, 'height': 50,
                 'collision_width': 500, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
@@ -41,7 +41,7 @@ class stage_02_1:
             },
             {
                 'image': self.Tile_04,
-                'x': 100, 'y': 140, 'width': 130, 'height': 50,
+                'x': 100, 'y': 550, 'width': 130, 'height': 50,
                 'collision_width': 130, 'collision_height': 50,
                 'collision_offset_x': 0, 'collision_offset_y': 0,
             },
