@@ -15,7 +15,7 @@ from collision import CHARACTER_HALF_HEIGHT, CHARACTER_HALF_WIDTH
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = stage_02
+START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
@@ -120,12 +120,12 @@ def handle_events():
                 running=False
             elif event.key==SDLK_a:
                 character.dir=-1
-                character.speed=3
+                character.speed=6
                 character.frame=0
                 character.is_attack=False
             elif event.key==SDLK_d:
                 character.dir=1
-                character.speed=3
+                character.speed=6
                 character.frame=0
                 character.is_attack=False
             elif event.key==SDLK_j:
