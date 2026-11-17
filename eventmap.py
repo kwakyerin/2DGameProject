@@ -7,11 +7,14 @@ class eventmap:
         self.change_time = 0
         self.current_color = 1
 
+        self.background=load_image('Event_Map/black_background.png')
+        
         self.Tile_01=load_image('Event_Map/Pink.png')
         self.Tile_02=load_image('Event_Map/Blue.png')
         self.Tile_03=load_image('Event_Map/Yellow.png')
         self.Tile_04=load_image('Map_03/purple_space/P_Tile_10.png')
         self.Tile_05=load_image('Map_03/gray_space/G_Tile_10.png')
+        
         self.platforms = [
             {
                 'image': self.Tile_01, 'color': 1,
@@ -144,6 +147,8 @@ class eventmap:
 
     def draw(self):
         self.update()
+
+        self.background.draw(400,300)
 
         for platform in self.platforms:
             if not self._is_platform_active(platform):
