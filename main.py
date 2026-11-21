@@ -20,24 +20,27 @@ START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect,stage1,stage_index,monster
+    global running,character,transformeffect,stage1,stage_index,monster,attack_hit
 
     running=True
     stage_index=STAGES.index(START_STAGE)
     stage1=STAGES[stage_index]()
     character=Pink()
     monster=monster_01()
+    attack_hit=False
     transformeffect=transform_effect(character.x,character.y)
     pass
 
 #게임 상태 업데이트
 def update_world():
-    global stage1,stage_index
+    global stage1,stage_index,attack_hit
 
     previous_x = character.x
     previous_y = character.y
     character.update()
-    monster.update()
+    monster.update(character)
+    if character.is_attack and not attack_hit:
+        attack_hit = monster.hit_by(character)
 
     if character.x >= SCREEN_WIDTH - SCREEN_EDGE:
         if stage_index < len(STAGES) - 1:
@@ -111,7 +114,7 @@ def transform_character(character_class):
 
 #컨트롤 관리
 def handle_events():
-    global running, character
+    global running, character, attack_hit
 
     event_list = get_events()
 
@@ -133,7 +136,10 @@ def handle_events():
                 character.frame=0
                 character.is_attack=False
             elif event.key==SDLK_j:
+                was_attacking = character.is_attack
                 character.attack()
+                if not was_attacking and character.is_attack:
+                    attack_hit = False
                 character.speed=0
             elif event.key==SDLK_w:
                 character.jump()
