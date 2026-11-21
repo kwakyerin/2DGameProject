@@ -10,6 +10,7 @@ from stage_02_1 import stage_02_1
 from stage_03 import stage_03
 from eventmap import eventmap
 from bossmap import bossmap
+from monster_01 import monster_01
 from collision import CHARACTER_HALF_HEIGHT, CHARACTER_HALF_WIDTH
 
 SCREEN_WIDTH = 1100
@@ -19,12 +20,13 @@ START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect,stage1,stage_index
+    global running,character,transformeffect,stage1,stage_index,monster
 
     running=True
     stage_index=STAGES.index(START_STAGE)
     stage1=STAGES[stage_index]()
     character=Pink()
+    monster=monster_01()
     transformeffect=transform_effect(character.x,character.y)
     pass
 
@@ -35,6 +37,7 @@ def update_world():
     previous_x = character.x
     previous_y = character.y
     character.update()
+    monster.update()
 
     if character.x >= SCREEN_WIDTH - SCREEN_EDGE:
         if stage_index < len(STAGES) - 1:
@@ -67,6 +70,7 @@ def update_world():
 def render_world():
     clear_canvas()
     stage1.draw()
+    monster.draw()
     transformeffect.draw()
     character.draw()
     draw_rectangle(
