@@ -6,6 +6,7 @@ class Pink:
         self.idle_image = load_image('Pink/Pink_Idle.png')
         self.run_image = load_image('Pink/Pink_Run.png')
         self.attack_image = load_image('Pink/Pink_Attack2.png')
+        self.hurt_image = load_image('Pink/Pink_Hurt.png')
         self.jump_image = load_image('Pink/Pink_Jump.png')
 
         self.x = 35
@@ -20,10 +21,13 @@ class Pink:
         self.jump_power = 12
 
         self.is_attack = False
+        self.is_hurt = False
         self.animation_time = 0
 
     def draw(self):
-        if self.is_attack:
+        if self.is_hurt:
+            image = self.hurt_image
+        elif self.is_attack:
             image = self.attack_image
         elif self.speed == 0:
             image = self.idle_image
@@ -46,7 +50,10 @@ class Pink:
         self.y += self.vy
         self.vy -= self.gravity
 
-        if self.is_attack:
+        if self.is_hurt:
+            frame_count = 4
+            frame_delay = 0.1
+        elif self.is_attack:
             frame_count = 6
             frame_delay = 0.06
         elif self.speed == 0:
@@ -60,15 +67,26 @@ class Pink:
             self.frame += 1
             self.animation_time = 0
 
-        if self.is_attack and self.frame >= 6:
+        if self.is_hurt and self.frame >= frame_count:
+            self.is_hurt = False
+            self.frame = 0
+        elif self.is_attack and self.frame >= 6:
             self.is_attack = False
             self.frame = 0
-        elif not self.is_attack:
+        elif not self.is_hurt and not self.is_attack:
             self.frame %= frame_count
 
     def attack(self):
         if not self.is_attack:
             self.is_attack = True
+            self.frame = 0
+            self.animation_time = 0
+
+    def hurt(self):
+        if not self.is_hurt:
+            self.is_hurt = True
+            self.is_attack = False
+            self.speed = 0
             self.frame = 0
             self.animation_time = 0
 

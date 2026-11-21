@@ -63,6 +63,9 @@ def update_world():
 
     stage1.resolve_character_collision(character, previous_x, previous_y)
 
+    if monster.check_character_contact(character) and isinstance(character, Pink):
+        character.hurt()
+
     transformeffect.x=character.x
     transformeffect.y=character.y
     

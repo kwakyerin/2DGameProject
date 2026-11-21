@@ -1,5 +1,7 @@
 from pico2d import draw_rectangle, load_image
 
+from collision import CHARACTER_HALF_HEIGHT, CHARACTER_HALF_WIDTH
+
 
 class monster_01:
     def __init__(self):
@@ -19,6 +21,7 @@ class monster_01:
         self.direction = 1
         self.left_bound = 60
         self.right_bound = 1040
+        self.character_touching = False
 
     def draw(self):
         if self.state == 'dead':
@@ -89,6 +92,19 @@ class monster_01:
         self.frame = 0
         self.animation_time = 0
         return True
+
+    def check_character_contact(self, character):
+        if self.state in ('death', 'dead'):
+            self.character_touching = False
+            return False
+
+        touching = (
+            abs(self.x - character.x) <= CHARACTER_HALF_WIDTH + 65 / 2
+            and abs(self.y - character.y) <= CHARACTER_HALF_HEIGHT + 120 / 2
+        )
+        entered_contact = touching and not self.character_touching
+        self.character_touching = touching
+        return entered_contact
 
     def update(self, character):
         if self.state == 'dead':
