@@ -1,4 +1,4 @@
-from pico2d import load_image
+from pico2d import draw_rectangle, load_image
 
 
 class monster_01:
@@ -6,11 +6,13 @@ class monster_01:
         self.idle_image = load_image('monster/Green_Slime/Green_Slime_Idle.png')
         self.walk_image = load_image('monster/Green_Slime/Green_Slime_Walk.png')
         self.hurt_image = load_image('monster/Green_Slime/Green_Slime_Hurt.png')
+        self.death_image = load_image('monster/Green_Slime/Green_Slime_Death.png')
         self.x = 500
         self.y = 55
         self.state = 'idle'
         self.frame = 0
         self.animation_time = 0
+        self.health = 3
         self.detection_distance = 250
         self.stop_distance = 60
         self.speed = 1.5
@@ -19,6 +21,9 @@ class monster_01:
         self.right_bound = 1040
 
     def draw(self):
+        if self.state == 'dead':
+            return
+
         if self.state == 'walk':
             image = self.walk_image
             source_x = 341 + self.frame * 362
@@ -26,6 +31,10 @@ class monster_01:
         elif self.state == 'hurt':
             image = self.hurt_image
             source_x = 318 + self.frame * 362
+            source_height = 682
+        elif self.state == 'death':
+            image = self.death_image
+            source_x = self.frame * 341
             source_height = 682
         else:
             image = self.idle_image
@@ -43,7 +52,30 @@ class monster_01:
                 self.x, self.y, 65, 120
             )
 
+        if self.state != 'death':
+            self.draw_health_bar()
+
+    def draw_health_bar(self):
+        bar_width = 48
+        bar_height = 3
+        left = self.x - bar_width / 2
+        bottom = self.y + 35
+
+        draw_rectangle(
+            left, bottom, left + bar_width, bottom + bar_height,
+            180, 35, 35, 255, True
+        )
+        if self.health > 0:
+            fill_width = bar_width * self.health / 3
+            draw_rectangle(
+                left, bottom, left + fill_width, bottom + bar_height,
+                45, 210, 60, 255, True
+            )
+
     def hit_by(self, character):
+        if self.state in ('death', 'dead'):
+            return False
+
         distance_x = self.x - character.x
         if (
             distance_x * character.dir <= 0
@@ -52,19 +84,24 @@ class monster_01:
         ):
             return False
 
-        self.state = 'hurt'
+        self.health -= 1
+        self.state = 'death' if self.health == 0 else 'hurt'
         self.frame = 0
         self.animation_time = 0
         return True
 
     def update(self, character):
-        if self.state == 'hurt':
+        if self.state == 'dead':
+            return
+
+        if self.state in ('hurt', 'death'):
             self.animation_time += 0.01
             if self.animation_time >= 0.12:
                 self.frame += 1
                 self.animation_time = 0
-                if self.frame >= 4:
-                    self.state = 'idle'
+                frame_count = 6 if self.state == 'death' else 4
+                if self.frame >= frame_count:
+                    self.state = 'dead' if self.state == 'death' else 'idle'
                     self.frame = 0
             return
 
