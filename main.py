@@ -1,6 +1,6 @@
 from pico2d import*
 from transform_effect import transform_effect
-from effect import Effect, FireEffect
+from effect import Effect, FireEffect, BubbleEffect
 from Pink import Pink
 from Blue import Blue
 from Yellow import Yellow
@@ -21,7 +21,7 @@ START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect,treat_effect,fire_effect
+    global running,character,transformeffect,treat_effect,fire_effect,bubble_effect
     global stage1,stage_index,monster,attack_hit
 
     running=True
@@ -33,6 +33,7 @@ def reset_world():
     transformeffect=transform_effect(character.x,character.y)
     treat_effect=Effect()
     fire_effect=FireEffect()
+    bubble_effect=BubbleEffect()
     pass
 
 #게임 상태 업데이트
@@ -76,6 +77,7 @@ def update_world():
     transformeffect.update()
     treat_effect.update(character.x, character.y)
     fire_effect.update(character.x, character.y)
+    bubble_effect.update(character.x, character.y)
     pass
 
 #화면에 그리기
@@ -87,6 +89,7 @@ def render_world():
     treat_effect.draw()
     fire_effect.draw()
     character.draw()
+    bubble_effect.draw()
     draw_rectangle(
         character.x - CHARACTER_HALF_WIDTH,
         character.y - CHARACTER_HALF_HEIGHT,
@@ -163,6 +166,8 @@ def handle_events():
             elif event.key==SDLK_k:
                 if isinstance(character, Yellow):
                     fire_effect.start(character.x, character.y)
+                elif isinstance(character, Blue):
+                    bubble_effect.start(character.x, character.y)
                 else:
                     treat_effect.start(character.x, character.y)
 

@@ -116,3 +116,37 @@ class FireEffect:
             140,
             280,
         )
+
+
+class BubbleEffect:
+    DURATION = 1.0
+    DRAW_SIZE = 110
+
+    def __init__(self):
+        self.image = load_image('Effect/Bubble.png')
+        self.x = 0
+        self.y = 0
+        self.elapsed_time = 0
+        self.is_active = False
+
+    def start(self, x, y):
+        self.x = x
+        self.y = y
+        self.elapsed_time = 0
+        self.is_active = True
+
+    def update(self, x, y):
+        if not self.is_active:
+            return
+
+        self.x = x
+        self.y = y
+        self.elapsed_time += 0.01
+        if self.elapsed_time >= self.DURATION:
+            self.is_active = False
+
+    def draw(self):
+        if not self.is_active:
+            return
+
+        self.image.draw(self.x, self.y, self.DRAW_SIZE, self.DRAW_SIZE)
