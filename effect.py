@@ -64,3 +64,55 @@ class Effect:
             140,
             280,
         )
+
+
+class FireEffect:
+    FRAME_WIDTH = 362
+    FRAME_HEIGHT = 724
+    FRAME_COUNT = 6
+    DRAW_Y_OFFSET = 25
+
+    def __init__(self):
+        self.image = load_image('Effect/Fire.png')
+        self.x = 0
+        self.y = 0
+        self.frame = 0
+        self.animation_time = 0
+        self.frame_delay = 0.07
+        self.is_active = False
+
+    def start(self, x, y):
+        self.x = x
+        self.y = y
+        self.frame = 0
+        self.animation_time = 0
+        self.is_active = True
+
+    def update(self, x, y):
+        if not self.is_active:
+            return
+
+        self.x = x
+        self.y = y
+        self.animation_time += 0.01
+
+        if self.animation_time >= self.frame_delay:
+            self.frame += 1
+            self.animation_time = 0
+            if self.frame >= self.FRAME_COUNT:
+                self.is_active = False
+
+    def draw(self):
+        if not self.is_active:
+            return
+
+        self.image.clip_draw(
+            self.frame * self.FRAME_WIDTH,
+            0,
+            self.FRAME_WIDTH,
+            self.FRAME_HEIGHT,
+            self.x,
+            self.y + self.DRAW_Y_OFFSET-10,
+            140,
+            280,
+        )
