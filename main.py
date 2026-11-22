@@ -16,13 +16,14 @@ from collision import CHARACTER_HALF_HEIGHT, CHARACTER_HALF_WIDTH
 
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
+TRANSFORM_COOLDOWN = 11.0
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
 START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
     global running,character,transformeffect,treat_effect,fire_effect,bubble_effect
-    global stage1,stage_index,monster,attack_hit
+    global stage1,stage_index,monster,attack_hit,transform_cooldown_until
 
     running=True
     stage_index=STAGES.index(START_STAGE)
@@ -30,6 +31,7 @@ def reset_world():
     character=Pink()
     monster=monster_01()
     attack_hit=False
+    transform_cooldown_until=0
     transformeffect=transform_effect(character.x,character.y)
     treat_effect=Effect()
     fire_effect=FireEffect()
@@ -128,7 +130,7 @@ def transform_character(character_class):
 
 #컨트롤 관리
 def handle_events():
-    global running, character, attack_hit
+    global running, character, attack_hit, transform_cooldown_until
 
     event_list = get_events()
 
@@ -157,12 +159,16 @@ def handle_events():
                 character.speed=0
             elif event.key==SDLK_w:
                 character.jump()
-            elif event.key==SDLK_1:
-                transform_character(Pink)
-            elif event.key==SDLK_2:
-                transform_character(Blue)
-            elif event.key==SDLK_3:
-                transform_character(Yellow)
+            elif event.key in (SDLK_1, SDLK_2, SDLK_3):
+                now = get_time()
+                if now >= transform_cooldown_until:
+                    if event.key==SDLK_1:
+                        transform_character(Pink)
+                    elif event.key==SDLK_2:
+                        transform_character(Blue)
+                    else:
+                        transform_character(Yellow)
+                    transform_cooldown_until = now + TRANSFORM_COOLDOWN
             elif event.key==SDLK_k:
                 if isinstance(character, Yellow):
                     fire_effect.start(character.x, character.y)
