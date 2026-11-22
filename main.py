@@ -1,5 +1,6 @@
 from pico2d import*
 from transform_effect import transform_effect
+from effect import Effect
 from Pink import Pink
 from Blue import Blue
 from Yellow import Yellow
@@ -20,7 +21,8 @@ START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect,stage1,stage_index,monster,attack_hit
+    global running,character,transformeffect,treat_effect
+    global stage1,stage_index,monster,attack_hit
 
     running=True
     stage_index=STAGES.index(START_STAGE)
@@ -29,6 +31,7 @@ def reset_world():
     monster=monster_01()
     attack_hit=False
     transformeffect=transform_effect(character.x,character.y)
+    treat_effect=Effect()
     pass
 
 #게임 상태 업데이트
@@ -70,6 +73,7 @@ def update_world():
     transformeffect.y=character.y
     
     transformeffect.update()
+    treat_effect.update(character.x, character.y)
     pass
 
 #화면에 그리기
@@ -78,6 +82,7 @@ def render_world():
     stage1.draw()
     monster.draw()
     transformeffect.draw()
+    treat_effect.draw()
     character.draw()
     draw_rectangle(
         character.x - CHARACTER_HALF_WIDTH,
@@ -152,6 +157,8 @@ def handle_events():
                 transform_character(Blue)
             elif event.key==SDLK_3:
                 transform_character(Yellow)
+            elif event.key==SDLK_k:
+                treat_effect.start(character.x, character.y)
 
         elif event.type==SDL_KEYUP:
             if event.key==SDLK_a and character.dir==-1:
