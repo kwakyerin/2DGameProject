@@ -71,6 +71,7 @@ class FireEffect:
     FRAME_HEIGHT = 724
     FRAME_COUNT = 6
     DRAW_Y_OFFSET = 25
+    DURATION = 10.0
 
     def __init__(self):
         self.image = load_image('Effect/Fire.png')
@@ -78,6 +79,7 @@ class FireEffect:
         self.y = 0
         self.frame = 0
         self.animation_time = 0
+        self.elapsed_time = 0
         self.frame_delay = 0.07
         self.is_active = False
 
@@ -86,6 +88,7 @@ class FireEffect:
         self.y = y
         self.frame = 0
         self.animation_time = 0
+        self.elapsed_time = 0
         self.is_active = True
 
     def update(self, x, y):
@@ -94,13 +97,16 @@ class FireEffect:
 
         self.x = x
         self.y = y
+        self.elapsed_time += 0.01
+        if self.elapsed_time >= self.DURATION:
+            self.is_active = False
+            return
+
         self.animation_time += 0.01
 
         if self.animation_time >= self.frame_delay:
-            self.frame += 1
+            self.frame = (self.frame + 1) % self.FRAME_COUNT
             self.animation_time = 0
-            if self.frame >= self.FRAME_COUNT:
-                self.is_active = False
 
     def draw(self):
         if not self.is_active:
@@ -119,7 +125,7 @@ class FireEffect:
 
 
 class BubbleEffect:
-    DURATION = 1.0
+    DURATION = 10.0
     DRAW_SIZE = 110
 
     def __init__(self):
