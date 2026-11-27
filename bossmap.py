@@ -3,6 +3,7 @@ from collision import check_collision
 
 class bossmap:
     def __init__(self):
+        self.background=load_image('background/Boss.png')
         self.image=load_image('Map_03/gray_space/G_Tile_11.png')
         
         self.left = 0
@@ -13,6 +14,7 @@ class bossmap:
         pass
 
     def draw(self):
+        self.background.draw(550, 325, 1100, 650)
         self.image.draw(550,10,1200,300)
 
         #빨간색 충돌 박스

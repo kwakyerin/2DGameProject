@@ -3,6 +3,7 @@ from collision import check_platform_collision
 
 class stage_03:
     def __init__(self):
+        self.background=load_image('background/Stage_03.png')
         self.Tile_01=load_image('Map_03/purple_space/P_Tile_01.png')
         self.Tile_02=load_image('Map_03/purple_space/P_Tile_11.png')
         self.Tile_03=load_image('Map_03/purple_space/P_Tile_10.png')
@@ -70,6 +71,8 @@ class stage_03:
         return left, bottom, right, top
 
     def draw(self):
+        self.background.draw(550, 325, 1100, 650)
+
         for platform in self.platforms:
             platform['image'].draw(
                 platform['x'], platform['y'],
