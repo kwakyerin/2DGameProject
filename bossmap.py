@@ -1,4 +1,4 @@
-from pico2d import load_image, draw_rectangle
+from pico2d import load_image
 from collision import check_collision
 
 class bossmap:
@@ -17,10 +17,6 @@ class bossmap:
         self.background.draw(550, 325, 1100, 650)
         self.image.draw(550,10,1200,300)
 
-        #빨간색 충돌 박스
-        draw_rectangle(self.left,self.bottom,self.right,self.top,
-            255, 0, 0
-        )
         pass
 
     def update(self):

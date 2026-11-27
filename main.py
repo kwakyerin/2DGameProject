@@ -12,7 +12,6 @@ from stage_03 import stage_03
 from eventmap import eventmap
 from bossmap import bossmap
 from monster_01 import monster_01
-from collision import CHARACTER_HALF_HEIGHT, CHARACTER_HALF_WIDTH
 
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
@@ -98,13 +97,6 @@ def render_world():
     fire_effect.draw()
     character.draw()
     bubble_effect.draw()
-    draw_rectangle(
-        character.x - CHARACTER_HALF_WIDTH,
-        character.y - CHARACTER_HALF_HEIGHT,
-        character.x + CHARACTER_HALF_WIDTH,
-        character.y + CHARACTER_HALF_HEIGHT,
-        255, 0, 0
-    )
     update_canvas()
 
 #캐릭터를 바꿀 때 현재 플레이 상태 유지

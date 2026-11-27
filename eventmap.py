@@ -1,4 +1,4 @@
-from pico2d import load_image, draw_rectangle, get_time
+from pico2d import load_image, get_time
 from collision import check_platform_collision
 
 class eventmap:
@@ -158,9 +158,6 @@ class eventmap:
                 platform['x'], platform['y'],
                 platform['width'], platform['height']
             )
-
-            left, bottom, right, top = self._get_platform_collision_box(platform)
-            draw_rectangle(left, bottom, right, top, 255, 0, 0)
 
     def update(self):
         now = get_time()

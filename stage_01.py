@@ -1,4 +1,4 @@
-from pico2d import load_image,draw_rectangle
+from pico2d import load_image
 from collision import check_platform_collision
 
 
@@ -67,9 +67,6 @@ class stage_01:
             h = platform['height']
 
             platform['image'].draw(x, y, w, h)
-
-            left, bottom, right, top = self._get_platform_collision_box(platform)
-            draw_rectangle(left, bottom, right, top, 255, 0, 0)
 
     def resolve_character_collision(self, character, previous_x, previous_y):
         character.on_ground = False
