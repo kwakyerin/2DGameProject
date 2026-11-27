@@ -45,9 +45,10 @@ def update_world():
     previous_x = character.x
     previous_y = character.y
     character.update()
-    monster.update(character)
-    if character.is_attack and not attack_hit:
-        attack_hit = monster.hit_by(character)
+    if stage_index == 0:
+        monster.update(character)
+        if character.is_attack and not attack_hit:
+            attack_hit = monster.hit_by(character)
 
     if character.x >= SCREEN_WIDTH - SCREEN_EDGE:
         if stage_index < len(STAGES) - 1:
@@ -70,7 +71,11 @@ def update_world():
 
     stage1.resolve_character_collision(character, previous_x, previous_y)
 
-    if monster.check_character_contact(character) and isinstance(character, Pink):
+    if (
+        stage_index == 0
+        and monster.check_character_contact(character)
+        and isinstance(character, Pink)
+    ):
         character.hurt()
 
     transformeffect.x=character.x
@@ -86,7 +91,8 @@ def update_world():
 def render_world():
     clear_canvas()
     stage1.draw()
-    monster.draw()
+    if stage_index == 0:
+        monster.draw()
     transformeffect.draw()
     treat_effect.draw()
     fire_effect.draw()
