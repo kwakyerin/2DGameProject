@@ -9,6 +9,9 @@ class UI:
     PANEL_HEIGHT = 130
     PANEL_LEFT_MARGIN = -70
     PANEL_TOP_MARGIN = 20
+    PINK_SLOT_X_RATIO = 0.32
+    PINK_SLOT_Y_RATIO = 0.50
+    PINK_IMAGE_SIZE = 90
     RIGHT_MARGIN = 20
     TOP_MARGIN = 20
     SCREEN_WIDTH = 1100
@@ -16,6 +19,7 @@ class UI:
 
     def __init__(self):
         self.panel_image = load_image('UI/UI.png')
+        self.pink_image = load_image('UI/Pink.png')
         self.full_heart_image = load_image('UI/Heart_01.png')
         self.empty_heart_image = load_image('UI/Heart_02.png')
         self.lost_hearts = 0
@@ -38,6 +42,20 @@ class UI:
             panel_y,
             self.PANEL_WIDTH,
             self.PANEL_HEIGHT,
+        )
+        panel_left = panel_x - self.PANEL_WIDTH / 2
+        panel_top = self.SCREEN_HEIGHT - self.PANEL_TOP_MARGIN
+        pink_x = (
+            panel_left + self.PANEL_WIDTH * self.PINK_SLOT_X_RATIO
+        )
+        pink_y = (
+            panel_top - self.PANEL_HEIGHT * self.PINK_SLOT_Y_RATIO
+        )
+        self.pink_image.draw(
+            pink_x,
+            pink_y,
+            self.PINK_IMAGE_SIZE,
+            self.PINK_IMAGE_SIZE,
         )
 
         y = self.SCREEN_HEIGHT - self.TOP_MARGIN - self.HEART_SIZE / 2
