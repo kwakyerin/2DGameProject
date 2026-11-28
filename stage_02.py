@@ -7,19 +7,27 @@ class stage_02:
     RAIN_MAX_SPAWN_INTERVAL = 0.3
     RAIN_DENSITY_RAMP_DURATION = 2.5
     RAIN_START_Y = 650
-    RAIN_DROP_WIDTH = 28
-    RAIN_DROP_HEIGHT = 72
+    RAIN_DROP_WIDTH = 24
+    RAIN_DROP_HEIGHT = 62
     RAIN_DROP_ANGLE = -0.25
-    RAIN_DURATION = 10.0
-    CLEAR_DURATION = 5.0
+    RAIN_DURATION = 20.0
+    CLEAR_DURATION = 10.0
+    WHITE_FLASH_COUNT = 2
+    WHITE_FLASH_DURATION = 0.15
+    WHITE_FLASH_GAP_DURATION = 0.15
 
     def __init__(self):
         self.background=load_image('background/Stage_02.png')
         self.rain_background=load_image('background/Stage_02_Rain.png')
+        self.white_background=load_image('background/White.png')
         self.rain_image=load_image('Effect/Rain.png')
         self.rain_opacity=0
         self.rain_density=0
         self.next_rain_toggle_at=get_time() + self.CLEAR_DURATION
+        self.white_flash_active=False
+        self.white_flash_visible=False
+        self.white_flash_count=0
+        self.next_white_flash_at=0
         self.last_rain_update_at=get_time()
         self.rain_spawn_accumulator=0
         self.rain_drops=[]
@@ -138,18 +146,42 @@ class stage_02:
                 )
             self.rain_image.opacify(1)
 
+    def draw_white_flash(self):
+        if self.white_flash_visible:
+            self.white_background.draw(550, 325, 1100, 650)
+
     def update_rain(self):
         now = get_time()
         elapsed_since_update = now - self.last_rain_update_at
         self.last_rain_update_at = now
 
-        if now >= self.next_rain_toggle_at:
-            self.rain_opacity = 1 - self.rain_opacity
-            duration = (
-                self.RAIN_DURATION if self.rain_opacity > 0
-                else self.CLEAR_DURATION
-            )
-            self.next_rain_toggle_at = now + duration
+        if self.white_flash_active:
+            if now >= self.next_white_flash_at:
+                if self.white_flash_visible:
+                    self.white_flash_count += 1
+                    self.white_flash_visible = False
+                    if self.white_flash_count >= self.WHITE_FLASH_COUNT:
+                        self.white_flash_active = False
+                        self.rain_opacity = 1
+                        self.next_rain_toggle_at = now + self.RAIN_DURATION
+                    else:
+                        self.next_white_flash_at = (
+                            now + self.WHITE_FLASH_GAP_DURATION
+                        )
+                else:
+                    self.white_flash_visible = True
+                    self.next_white_flash_at = (
+                        now + self.WHITE_FLASH_DURATION
+                    )
+        elif now >= self.next_rain_toggle_at:
+            if self.rain_opacity > 0:
+                self.rain_opacity = 0
+                self.next_rain_toggle_at = now + self.CLEAR_DURATION
+            else:
+                self.white_flash_active = True
+                self.white_flash_visible = True
+                self.white_flash_count = 0
+                self.next_white_flash_at = now + self.WHITE_FLASH_DURATION
 
         density_change = (
             elapsed_since_update / self.RAIN_DENSITY_RAMP_DURATION

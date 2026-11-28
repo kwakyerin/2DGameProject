@@ -17,7 +17,7 @@ SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 TRANSFORM_COOLDOWN = 11.0
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = stage_03
+START_STAGE = stage_02
 
 #월드 구성하는 객체들 초기화
 def reset_world():
@@ -103,6 +103,8 @@ def render_world():
     fire_effect.draw()
     character.draw()
     bubble_effect.draw()
+    if stage_index == 2:
+        stage1.draw_white_flash()
     update_canvas()
 
 #캐릭터를 바꿀 때 현재 플레이 상태 유지
