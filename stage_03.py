@@ -4,16 +4,29 @@ from collision import check_platform_collision
 
 class stage_03:
     ASTEROID_INTERVAL = 5.0
-    ASTEROID_SPRITE_LEFT = 80
-    ASTEROID_SPRITE_BOTTOM = 257
-    ASTEROID_SPRITE_SIZE = 150
-    ASTEROID_DRAW_SIZE = 80
+    ASTEROID_FRAMES = (
+        (80, 252, 150, 165),
+        (295, 247, 220, 225),
+        (520, 227, 250, 305),
+        (750, 217, 268, 375),
+    )
+    ASTEROID_FRAME_DURATION = 0.1
+    ASTEROID_DRAW_WIDTH = 80
+    ASTEROID_MAX_DRAW_HEIGHT = 112
     ASTEROID_ANGLE = -0.25
+    EXPLOSION_SPRITE_LEFT = 990
+    EXPLOSION_SPRITE_BOTTOM = 217
+    EXPLOSION_SPRITE_WIDTH = 330
+    EXPLOSION_SPRITE_HEIGHT = 190
+    EXPLOSION_DURATION = 0.8
+    EXPLOSION_DRAW_WIDTH = 132
+    EXPLOSION_DRAW_HEIGHT = 76
 
     def __init__(self):
         self.background=load_image('background/Stage_03.png')
         self.asteroid_image=load_image('Effect/asteroid.png')
         self.asteroids=[]
+        self.explosions=[]
         self.next_asteroid_at=get_time() + self.ASTEROID_INTERVAL
         self.last_asteroid_update_at=get_time()
         self.Tile_01=load_image('Map_03/purple_space/P_Tile_01.png')
@@ -92,18 +105,40 @@ class stage_03:
             )
 
         for asteroid in self.asteroids:
+            left, bottom, frame_width, frame_height = self.ASTEROID_FRAMES[
+                asteroid['frame_index']
+            ]
             self.asteroid_image.clip_composite_draw(
-                self.ASTEROID_SPRITE_LEFT,
-                self.ASTEROID_SPRITE_BOTTOM,
-                self.ASTEROID_SPRITE_SIZE,
-                self.ASTEROID_SPRITE_SIZE,
+                left,
+                bottom,
+                frame_width,
+                frame_height,
                 self.ASTEROID_ANGLE,
                 '',
                 asteroid['x'],
                 asteroid['y'],
-                self.ASTEROID_DRAW_SIZE,
-                self.ASTEROID_DRAW_SIZE,
+                self.ASTEROID_DRAW_WIDTH,
+                self.ASTEROID_DRAW_WIDTH * frame_height / frame_width,
             )
+
+        for explosion in self.explosions:
+            progress = explosion['elapsed'] / self.EXPLOSION_DURATION
+            scale = 0.5 + progress
+            draw_height = self.EXPLOSION_DRAW_HEIGHT * scale
+            self.asteroid_image.opacify(1 - progress)
+            self.asteroid_image.clip_composite_draw(
+                self.EXPLOSION_SPRITE_LEFT,
+                self.EXPLOSION_SPRITE_BOTTOM,
+                self.EXPLOSION_SPRITE_WIDTH,
+                self.EXPLOSION_SPRITE_HEIGHT,
+                0,
+                '',
+                explosion['x'],
+                explosion['platform_top'] + draw_height / 2-8,
+                self.EXPLOSION_DRAW_WIDTH * scale,
+                draw_height,
+            )
+        self.asteroid_image.opacify(1)
 
     def update_asteroids(self):
         now = get_time()
@@ -116,18 +151,71 @@ class stage_03:
                 'y': 650,
                 'speed': random.uniform(250, 400),
                 'wind_speed': random.uniform(70, 140),
+                'frame_index': 1,
+                'animation_time': 0,
             })
             self.next_asteroid_at = now + self.ASTEROID_INTERVAL
 
+        for explosion in self.explosions:
+            explosion['elapsed'] += elapsed
+        self.explosions = [
+            explosion for explosion in self.explosions
+            if explosion['elapsed'] < self.EXPLOSION_DURATION
+        ]
+
+        remaining_asteroids = []
+        radius = self.ASTEROID_DRAW_WIDTH / 2
         for asteroid in self.asteroids:
+            previous_x = asteroid['x']
+            previous_y = asteroid['y']
             asteroid['x'] -= asteroid['wind_speed'] * elapsed
             asteroid['y'] -= asteroid['speed'] * elapsed
+            asteroid['animation_time'] += elapsed
+            while asteroid['animation_time'] >= self.ASTEROID_FRAME_DURATION:
+                asteroid['animation_time'] -= self.ASTEROID_FRAME_DURATION
+                asteroid['frame_index'] = (
+                    asteroid['frame_index'] + 1
+                ) % len(self.ASTEROID_FRAMES)
 
-        self.asteroids = [
-            asteroid for asteroid in self.asteroids
-            if asteroid['y'] > -self.ASTEROID_DRAW_SIZE
-            and asteroid['x'] > -self.ASTEROID_DRAW_SIZE
-        ]
+            impact_y = None
+            for platform in self.platforms:
+                left, bottom, right, top = self._get_platform_collision_box(platform)
+                asteroid_left = asteroid['x'] - radius
+                asteroid_right = asteroid['x'] + radius
+                asteroid_bottom = asteroid['y'] - radius
+                asteroid_top = asteroid['y'] + radius
+                swept_left = min(previous_x, asteroid['x']) - radius
+                swept_right = max(previous_x, asteroid['x']) + radius
+                crossed_platform_top = (
+                    previous_y - radius >= top
+                    and asteroid_bottom <= top
+                    and swept_right > left
+                    and swept_left < right
+                )
+                overlaps_platform = (
+                    asteroid_right > left
+                    and asteroid_left < right
+                    and asteroid_top > bottom
+                    and asteroid_bottom < top
+                )
+
+                if crossed_platform_top or overlaps_platform:
+                    impact_y = top
+                    break
+
+            if impact_y is not None:
+                self.explosions.append({
+                    'x': asteroid['x'],
+                    'platform_top': impact_y,
+                    'elapsed': 0,
+                })
+            elif (
+                asteroid['y'] > -self.ASTEROID_MAX_DRAW_HEIGHT
+                and asteroid['x'] > -self.ASTEROID_DRAW_WIDTH
+            ):
+                remaining_asteroids.append(asteroid)
+
+        self.asteroids = remaining_asteroids
 
     def update(self):
         pass
