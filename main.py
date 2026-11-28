@@ -73,7 +73,7 @@ def update_world():
     if stage_index == 2:
         stage1.update_rain()
     elif stage_index == 4:
-        stage1.update_asteroids()
+        stage1.update_asteroids(character)
 
     if (
         stage_index == 0

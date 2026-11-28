@@ -2,6 +2,10 @@ from pico2d import load_image
 
 
 class Pink:
+    HURT_BLINK_INTERVAL = 0.1
+    HURT_BLINK_CYCLES = 2
+    HURT_FRAME_SEQUENCE = (1, 2, 1, 2)
+
     def __init__(self):
         self.idle_image = load_image('Pink/Pink_Idle.png')
         self.run_image = load_image('Pink/Pink_Run.png')
@@ -22,9 +26,19 @@ class Pink:
 
         self.is_attack = False
         self.is_hurt = False
+        self.hurt_cycles_remaining = 0
+        self.hurt_blink_time = 0
         self.animation_time = 0
 
     def draw(self):
+        if (
+            self.is_hurt
+            and self.hurt_blink_time
+            < self.HURT_BLINK_INTERVAL * self.HURT_BLINK_CYCLES * 2
+            and int(self.hurt_blink_time / self.HURT_BLINK_INTERVAL) % 2
+        ):
+            return
+
         if self.is_hurt:
             image = self.hurt_image
         elif self.is_attack:
@@ -34,13 +48,14 @@ class Pink:
         else:
             image = self.run_image
 
+        frame = self.HURT_FRAME_SEQUENCE[self.frame] if self.is_hurt else self.frame
         if self.dir < 0:
             image.clip_composite_draw(
-                self.frame * 32, 0, 32, 32, 0, 'h', self.x, self.y, 70, 70
+                frame * 32, 0, 32, 32, 0, 'h', self.x, self.y, 70, 70
             )
         else:
             image.clip_draw(
-                self.frame * 32, 0, 32, 32, self.x, self.y, 70, 70
+                frame * 32, 0, 32, 32, self.x, self.y, 70, 70
             )
 
     def update(self):
@@ -51,6 +66,7 @@ class Pink:
         self.vy -= self.gravity
 
         if self.is_hurt:
+            self.hurt_blink_time += 0.01
             frame_count = 4
             frame_delay = 0.1
         elif self.is_attack:
@@ -68,7 +84,9 @@ class Pink:
             self.animation_time = 0
 
         if self.is_hurt and self.frame >= frame_count:
-            self.is_hurt = False
+            self.hurt_cycles_remaining -= 1
+            if self.hurt_cycles_remaining == 0:
+                self.is_hurt = False
             self.frame = 0
         elif self.is_attack and self.frame >= 6:
             self.is_attack = False
@@ -85,6 +103,8 @@ class Pink:
     def hurt(self):
         if not self.is_hurt:
             self.is_hurt = True
+            self.hurt_cycles_remaining = 1
+            self.hurt_blink_time = 0
             self.is_attack = False
             self.speed = 0
             self.frame = 0
