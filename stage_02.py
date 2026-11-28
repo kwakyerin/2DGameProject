@@ -8,16 +8,15 @@ class stage_02:
     RAIN_DROP_WIDTH = 28
     RAIN_DROP_HEIGHT = 72
     RAIN_DROP_ANGLE = -0.25
+    RAIN_DURATION = 10.0
+    CLEAR_DURATION = 5.0
 
     def __init__(self):
         self.background=load_image('background/Stage_02.png')
         self.rain_background=load_image('background/Stage_02_Rain.png')
         self.rain_image=load_image('Effect/Rain.png')
         self.rain_opacity=0
-        self.rain_transition_started_at=None
-        self.rain_transition_from=0
-        self.rain_target_opacity=0
-        self.next_rain_toggle_at=get_time() + 5.0
+        self.next_rain_toggle_at=get_time() + self.CLEAR_DURATION
         self.last_rain_update_at=get_time()
         self.rain_spawn_accumulator=0
         self.rain_drops=[]
@@ -140,32 +139,20 @@ class stage_02:
         now = get_time()
         elapsed_since_update = now - self.last_rain_update_at
         self.last_rain_update_at = now
-        fade_duration = 8.0
 
         if now >= self.next_rain_toggle_at:
-            self.rain_transition_from = self.rain_opacity
-            self.rain_target_opacity = 1 - self.rain_target_opacity
-            self.rain_transition_started_at = now
-            self.next_rain_toggle_at = now + 5.0
-
-        if self.rain_transition_started_at is None:
-            return
-
-        elapsed = now - self.rain_transition_started_at
-        progress = min(elapsed / fade_duration, 1)
-        eased_progress = progress * progress * (3 - 2 * progress)
-        self.rain_opacity = self.rain_transition_from + (
-            self.rain_target_opacity - self.rain_transition_from
-        ) * eased_progress
-
-        if progress >= 1:
-            self.rain_transition_started_at = None
+            self.rain_opacity = 1 - self.rain_opacity
+            duration = (
+                self.RAIN_DURATION if self.rain_opacity > 0
+                else self.CLEAR_DURATION
+            )
+            self.next_rain_toggle_at = now + duration
 
         for drop in self.rain_drops:
             drop['x'] -= drop['wind_speed'] * elapsed_since_update
             drop['y'] -= drop['speed'] * elapsed_since_update
 
-        if self.rain_target_opacity > 0:
+        if self.rain_opacity > 0:
             self.rain_spawn_accumulator += elapsed_since_update
             while self.rain_spawn_accumulator >= self.RAIN_SPAWN_INTERVAL:
                 self.rain_drops.append({
