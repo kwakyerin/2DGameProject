@@ -5,12 +5,17 @@ class UI:
     HEART_COUNT = 5
     HEART_SIZE = 72
     HEART_SPACING = 8
+    PANEL_WIDTH = 390
+    PANEL_HEIGHT = 130
+    PANEL_LEFT_MARGIN = -70
+    PANEL_TOP_MARGIN = 20
     RIGHT_MARGIN = 20
     TOP_MARGIN = 20
     SCREEN_WIDTH = 1100
-    SCREEN_HEIGHT = 650
+    SCREEN_HEIGHT = 670
 
     def __init__(self):
+        self.panel_image = load_image('UI/UI.png')
         self.full_heart_image = load_image('UI/Heart_01.png')
         self.empty_heart_image = load_image('UI/Heart_02.png')
         self.lost_hearts = 0
@@ -22,6 +27,19 @@ class UI:
         self.was_hurt = is_hurt
 
     def draw(self):
+        panel_x = self.PANEL_LEFT_MARGIN + self.PANEL_WIDTH / 2
+        panel_y = (
+            self.SCREEN_HEIGHT
+            - self.PANEL_TOP_MARGIN
+            - self.PANEL_HEIGHT / 2
+        )
+        self.panel_image.draw(
+            panel_x,
+            panel_y,
+            self.PANEL_WIDTH,
+            self.PANEL_HEIGHT,
+        )
+
         y = self.SCREEN_HEIGHT - self.TOP_MARGIN - self.HEART_SIZE / 2
         leftmost_x = (
             self.SCREEN_WIDTH
