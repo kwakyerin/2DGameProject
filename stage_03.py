@@ -4,6 +4,8 @@ from collision import check_platform_collision
 
 class stage_03:
     ASTEROID_INTERVAL = 5.0
+    ASTEROIDS_PER_SPAWN = 3
+    ASTEROID_PASS_THROUGH_CHANCE = 0.4
     ASTEROID_FRAMES = (
         (80, 252, 150, 165),
         (295, 247, 220, 225),
@@ -30,6 +32,7 @@ class stage_03:
         self.asteroids=[]
         self.explosions=[]
         self.next_asteroid_at=get_time() + self.ASTEROID_INTERVAL
+        self.spawn_asteroid_next=True
         self.last_asteroid_update_at=get_time()
         self.Tile_01=load_image('Map_03/purple_space/P_Tile_01.png')
         self.Tile_02=load_image('Map_03/purple_space/P_Tile_11.png')
@@ -154,14 +157,21 @@ class stage_03:
         self.last_asteroid_update_at = now
 
         if now >= self.next_asteroid_at:
-            self.asteroids.append({
-                'x': random.uniform(0, 1100),
-                'y': 650,
-                'speed': random.uniform(250, 400),
-                'wind_speed': random.uniform(70, 140),
-                'frame_index': 1,
-                'animation_time': 0,
-            })
+            if self.spawn_asteroid_next:
+                for _ in range(self.ASTEROIDS_PER_SPAWN):
+                    self.asteroids.append({
+                        'x': random.uniform(0, 1100),
+                        'y': 650,
+                        'speed': random.uniform(250, 400),
+                        'wind_speed': random.uniform(70, 140),
+                        'pass_through_platforms': (
+                            random.random()
+                            < self.ASTEROID_PASS_THROUGH_CHANCE
+                        ),
+                        'frame_index': 1,
+                        'animation_time': 0,
+                    })
+            self.spawn_asteroid_next = not self.spawn_asteroid_next
             self.next_asteroid_at = now + self.ASTEROID_INTERVAL
 
         for explosion in self.explosions:
@@ -173,6 +183,11 @@ class stage_03:
 
         remaining_asteroids = []
         radius = self.ASTEROID_DRAW_WIDTH / 2
+        platform_boxes = [
+            self._get_platform_collision_box(platform)
+            for platform in self.platforms
+        ]
+        ground_top = min(box[3] for box in platform_boxes)
         for asteroid in self.asteroids:
             previous_x = asteroid['x']
             previous_y = asteroid['y']
@@ -186,8 +201,13 @@ class stage_03:
                 ) % len(self.ASTEROID_FRAMES)
 
             impact_y = None
-            for platform in self.platforms:
-                left, bottom, right, top = self._get_platform_collision_box(platform)
+            for left, bottom, right, top in platform_boxes:
+                if (
+                    asteroid['pass_through_platforms']
+                    and top > ground_top
+                ):
+                    continue
+
                 asteroid_left = asteroid['x'] - radius
                 asteroid_right = asteroid['x'] + radius
                 asteroid_bottom = asteroid['y'] - radius
