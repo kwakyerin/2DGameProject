@@ -15,12 +15,24 @@ class stage_02:
     WHITE_FLASH_COUNT = 2
     WHITE_FLASH_DURATION = 0.15
     WHITE_FLASH_GAP_DURATION = 0.15
+    LIGHTNING_FRAME_COUNT = 8
+    LIGHTNING_FRAME_DURATION = (
+        WHITE_FLASH_DURATION / LIGHTNING_FRAME_COUNT
+    )
+    LIGHTNING_SHEET_WIDTH = 2172
+    LIGHTNING_FRAME_HEIGHT = 724
+    LIGHTNING_SCREEN_WIDTH = 1100
+    LIGHTNING_SCREEN_HEIGHT = 650
+    LIGHTNING_DRAW_WIDTH = 320
+    LIGHTNING_DRAW_HEIGHT = 650
+    LIGHTNING_TOP_OVERSHOOT = 155
 
     def __init__(self):
         self.background=load_image('background/Stage_02.png')
         self.rain_background=load_image('background/Stage_02_Rain.png')
         self.white_background=load_image('background/White.png')
         self.rain_image=load_image('Effect/Rain.png')
+        self.lightning_image=load_image('Effect/lightning.png')
         self.rain_opacity=0
         self.rain_density=0
         self.next_rain_toggle_at=get_time() + self.CLEAR_DURATION
@@ -28,6 +40,9 @@ class stage_02:
         self.white_flash_visible=False
         self.white_flash_count=0
         self.next_white_flash_at=0
+        self.lightning_frame=0
+        self.next_lightning_frame_at=0
+        self.lightning_bolts=[]
         self.last_rain_update_at=get_time()
         self.rain_spawn_accumulator=0
         self.rain_drops=[]
@@ -149,6 +164,57 @@ class stage_02:
     def draw_white_flash(self):
         if self.white_flash_visible:
             self.white_background.draw(550, 325, 1100, 650)
+            frame_left = int(
+                self.lightning_frame
+                * self.LIGHTNING_SHEET_WIDTH
+                / self.LIGHTNING_FRAME_COUNT
+            )
+            frame_right = int(
+                (self.lightning_frame + 1)
+                * self.LIGHTNING_SHEET_WIDTH
+                / self.LIGHTNING_FRAME_COUNT
+            )
+            for bolt in self.lightning_bolts:
+                self.lightning_image.clip_draw(
+                    frame_left,
+                    0,
+                    frame_right - frame_left,
+                    self.LIGHTNING_FRAME_HEIGHT,
+                    bolt['x'],
+                    bolt['y'],
+                    bolt['width'],
+                    bolt['height'],
+                )
+
+    def _start_lightning_animation(self, now):
+        self.lightning_frame = 0
+        self.next_lightning_frame_at = (
+            now + self.LIGHTNING_FRAME_DURATION
+        )
+        bolt_count = random.randint(2, 3)
+        self.lightning_bolts = []
+        for index in range(bolt_count):
+            scale = (
+                1
+                if index == 0
+                else random.uniform(0.4, 0.7)
+            )
+            width = self.LIGHTNING_DRAW_WIDTH * scale
+            height = self.LIGHTNING_DRAW_HEIGHT * scale
+            self.lightning_bolts.append({
+                'x': random.uniform(
+                    width / 2,
+                    self.LIGHTNING_SCREEN_WIDTH - width / 2,
+                ),
+                'y': (
+                    self.LIGHTNING_SCREEN_HEIGHT
+                    - height / 2
+                    + self.LIGHTNING_TOP_OVERSHOOT
+                    * height / self.LIGHTNING_DRAW_HEIGHT
+                ),
+                'width': width,
+                'height': height,
+            })
 
     def update_rain(self):
         now = get_time()
@@ -170,6 +236,7 @@ class stage_02:
                         )
                 else:
                     self.white_flash_visible = True
+                    self._start_lightning_animation(now)
                     self.next_white_flash_at = (
                         now + self.WHITE_FLASH_DURATION
                     )
@@ -181,7 +248,22 @@ class stage_02:
                 self.white_flash_active = True
                 self.white_flash_visible = True
                 self.white_flash_count = 0
+                self._start_lightning_animation(now)
                 self.next_white_flash_at = now + self.WHITE_FLASH_DURATION
+
+        while (
+            self.white_flash_visible
+            and now >= self.next_lightning_frame_at
+        ):
+            if self.lightning_frame < self.LIGHTNING_FRAME_COUNT - 1:
+                self.lightning_frame += 1
+                self.next_lightning_frame_at += (
+                    self.LIGHTNING_FRAME_DURATION
+                )
+            else:
+                self.next_lightning_frame_at = (
+                    now + self.LIGHTNING_FRAME_DURATION
+                )
 
         density_change = (
             elapsed_since_update / self.RAIN_DENSITY_RAMP_DURATION
