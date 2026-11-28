@@ -143,7 +143,7 @@ class FireAttackEffect:
     )
     FRAME_COUNT = len(FRAME_RECTS)
     FRAME_DELAY = 0.07
-    DRAW_SCALE = 0.24
+    DRAW_SCALE = 0.3
     DRAW_MAX_WIDTH = max(frame[2] for frame in FRAME_RECTS) * DRAW_SCALE
     SPAWN_OFFSET = 50
     MOVE_SPEED = 8
