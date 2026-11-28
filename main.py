@@ -12,17 +12,19 @@ from stage_03 import stage_03
 from eventmap import eventmap
 from bossmap import bossmap
 from monster_01 import monster_01
+from UI import UI
 
 SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 TRANSFORM_COOLDOWN = 11.0
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = stage_02
+START_STAGE = stage_01
 
 #월드 구성하는 객체들 초기화
 def reset_world():
     global running, character, transformeffect, treat_effect
     global fire_effect, fire_attack_effect, bubble_effect
+    global ui
     global stage1,stage_index,monster,attack_hit,transform_cooldown_until
 
     running=True
@@ -37,6 +39,7 @@ def reset_world():
     fire_effect=FireEffect()
     fire_attack_effect=FireAttackEffect()
     bubble_effect=BubbleEffect()
+    ui=UI()
     pass
 
 #게임 상태 업데이트
@@ -72,7 +75,11 @@ def update_world():
 
     stage1.resolve_character_collision(character, previous_x, previous_y)
 
-    if stage_index == 2:
+    if stage_index == 0:
+        stage1.update_leaves()
+    elif stage_index == 1:
+        stage1.update_leaves()
+    elif stage_index == 2:
         stage1.update_rain()
     elif stage_index == 4:
         stage1.update_asteroids(character)
@@ -109,6 +116,7 @@ def render_world():
     bubble_effect.draw()
     if stage_index == 2:
         stage1.draw_white_flash()
+    ui.draw()
     update_canvas()
 
 #캐릭터를 바꿀 때 현재 플레이 상태 유지

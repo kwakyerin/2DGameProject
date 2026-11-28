@@ -1,10 +1,31 @@
-from pico2d import load_image
+import random
+from pico2d import get_time, load_image
 from collision import check_platform_collision
 
 class stage_01_1:
+    LEAF_FRAMES = (
+        (37, 233, 453, 341),
+        (562, 247, 486, 318),
+        (1139, 239, 464, 360),
+        (1666, 269, 442, 252),
+    )
+    LEAF_MIN_SPAWN_INTERVAL = 0.55
+    LEAF_MAX_SPAWN_INTERVAL = 1.2
+    LEAF_SPAWN_Y = 700
+    LEAF_FALL_SPEED_RANGE = (70, 100)
+    LEAF_DRIFT_SPEED_RANGE = (25, 45)
+    LEAF_SIZE_RANGE = (30, 48)
 
     def __init__(self):
         self.background=load_image('background/Stage_01_2.png')
+        self.leaf_image=load_image('Effect/Leaf_02.png')
+        self.leaves=[]
+        now = get_time()
+        self.last_leaf_update_at = now
+        self.next_leaf_spawn_at = now + random.uniform(
+            self.LEAF_MIN_SPAWN_INTERVAL,
+            self.LEAF_MAX_SPAWN_INTERVAL,
+        )
         self.Tile_01=load_image('Map_01/DGreen_Grass/Tile_04.png')
         self.Tile_02=load_image('Map_01/DGreen_Grass/Tile_01.png')
         self.Tile_03=load_image('Map_01/DGreen_Grass/Tile_02.png')
@@ -71,8 +92,61 @@ class stage_01_1:
                 platform['width'], platform['height']
             )
 
-    def update(self):
-        pass
+        for leaf in self.leaves:
+            frame_left, frame_bottom, frame_width, frame_height = (
+                self.LEAF_FRAMES[leaf['frame']]
+            )
+            draw_width = leaf['size']
+            draw_height = draw_width * frame_height / frame_width
+            self.leaf_image.clip_composite_draw(
+                frame_left,
+                frame_bottom,
+                frame_width,
+                frame_height,
+                leaf['angle'],
+                leaf['flip'],
+                leaf['x'],
+                leaf['y'],
+                draw_width,
+                draw_height,
+            )
+
+    def update_leaves(self):
+        now = get_time()
+        elapsed = now - self.last_leaf_update_at
+        self.last_leaf_update_at = now
+
+        while now >= self.next_leaf_spawn_at:
+            self.leaves.append({
+                'x': random.uniform(0, 1100),
+                'y': self.LEAF_SPAWN_Y,
+                'frame': random.randrange(len(self.LEAF_FRAMES)),
+                'fall_speed': random.uniform(*self.LEAF_FALL_SPEED_RANGE),
+                'drift_speed': random.uniform(
+                    *self.LEAF_DRIFT_SPEED_RANGE
+                ),
+                'angle': random.uniform(0, 6.283185307179586),
+                'rotation_speed': random.choice((-1, 1)) * random.uniform(
+                    0.3, 0.7
+                ),
+                'flip': random.choice(('', 'h')),
+                'size': random.uniform(*self.LEAF_SIZE_RANGE),
+            })
+            self.next_leaf_spawn_at += random.uniform(
+                self.LEAF_MIN_SPAWN_INTERVAL,
+                self.LEAF_MAX_SPAWN_INTERVAL,
+            )
+
+        for leaf in self.leaves:
+            leaf['x'] -= leaf['drift_speed'] * elapsed
+            leaf['y'] -= leaf['fall_speed'] * elapsed
+            leaf['angle'] += leaf['rotation_speed'] * elapsed
+
+        self.leaves = [
+            leaf for leaf in self.leaves
+            if leaf['y'] > -leaf['size']
+            and -leaf['size'] < leaf['x'] < 1100 + leaf['size']
+        ]
 
     def resolve_character_collision(self, character, previous_x, previous_y):
         character.on_ground = False
