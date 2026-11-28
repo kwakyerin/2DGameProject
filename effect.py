@@ -5,6 +5,7 @@ class Effect:
     FRAME_WIDTH = 362
     FRAME_HEIGHT = 724
     FRAME_COUNT = 6
+    DURATION = 5.0
     FRAME_CENTERS = (
         (163.2, 360.4),
         (146.7, 351.0),
@@ -20,6 +21,7 @@ class Effect:
         self.y = 0
         self.frame = 0
         self.animation_time = 0
+        self.elapsed_time = 0
         self.frame_delay = 0.07
         self.is_active = False
 
@@ -28,6 +30,7 @@ class Effect:
         self.y = y
         self.frame = 0
         self.animation_time = 0
+        self.elapsed_time = 0
         self.is_active = True
 
     def update(self, x, y):
@@ -36,13 +39,16 @@ class Effect:
 
         self.x = x
         self.y = y
+        self.elapsed_time += 0.01
+        if self.elapsed_time >= self.DURATION:
+            self.is_active = False
+            return
+
         self.animation_time += 0.01
 
         if self.animation_time >= self.frame_delay:
-            self.frame += 1
+            self.frame = (self.frame + 1) % self.FRAME_COUNT
             self.animation_time = 0
-            if self.frame >= self.FRAME_COUNT:
-                self.is_active = False
 
     def draw(self):
         if not self.is_active:
