@@ -1,9 +1,21 @@
-from pico2d import load_image
+import random
+from pico2d import get_time, load_image
 from collision import check_platform_collision
 
 class stage_03:
+    ASTEROID_INTERVAL = 5.0
+    ASTEROID_SPRITE_LEFT = 80
+    ASTEROID_SPRITE_BOTTOM = 257
+    ASTEROID_SPRITE_SIZE = 150
+    ASTEROID_DRAW_SIZE = 80
+    ASTEROID_ANGLE = -0.25
+
     def __init__(self):
         self.background=load_image('background/Stage_03.png')
+        self.asteroid_image=load_image('Effect/asteroid.png')
+        self.asteroids=[]
+        self.next_asteroid_at=get_time() + self.ASTEROID_INTERVAL
+        self.last_asteroid_update_at=get_time()
         self.Tile_01=load_image('Map_03/purple_space/P_Tile_01.png')
         self.Tile_02=load_image('Map_03/purple_space/P_Tile_11.png')
         self.Tile_03=load_image('Map_03/purple_space/P_Tile_10.png')
@@ -78,6 +90,44 @@ class stage_03:
                 platform['x'], platform['y'],
                 platform['width'], platform['height']
             )
+
+        for asteroid in self.asteroids:
+            self.asteroid_image.clip_composite_draw(
+                self.ASTEROID_SPRITE_LEFT,
+                self.ASTEROID_SPRITE_BOTTOM,
+                self.ASTEROID_SPRITE_SIZE,
+                self.ASTEROID_SPRITE_SIZE,
+                self.ASTEROID_ANGLE,
+                '',
+                asteroid['x'],
+                asteroid['y'],
+                self.ASTEROID_DRAW_SIZE,
+                self.ASTEROID_DRAW_SIZE,
+            )
+
+    def update_asteroids(self):
+        now = get_time()
+        elapsed = now - self.last_asteroid_update_at
+        self.last_asteroid_update_at = now
+
+        if now >= self.next_asteroid_at:
+            self.asteroids.append({
+                'x': random.uniform(0, 1100),
+                'y': 650,
+                'speed': random.uniform(250, 400),
+                'wind_speed': random.uniform(70, 140),
+            })
+            self.next_asteroid_at = now + self.ASTEROID_INTERVAL
+
+        for asteroid in self.asteroids:
+            asteroid['x'] -= asteroid['wind_speed'] * elapsed
+            asteroid['y'] -= asteroid['speed'] * elapsed
+
+        self.asteroids = [
+            asteroid for asteroid in self.asteroids
+            if asteroid['y'] > -self.ASTEROID_DRAW_SIZE
+            and asteroid['x'] > -self.ASTEROID_DRAW_SIZE
+        ]
 
     def update(self):
         pass

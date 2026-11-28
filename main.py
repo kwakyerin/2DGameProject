@@ -17,7 +17,7 @@ SCREEN_WIDTH = 1100
 SCREEN_EDGE = 25
 TRANSFORM_COOLDOWN = 11.0
 STAGES = (stage_01, stage_01_1, stage_02, stage_02_1, stage_03, eventmap, bossmap)
-START_STAGE = stage_02
+START_STAGE = stage_03
 
 #월드 구성하는 객체들 초기화
 def reset_world():
@@ -72,6 +72,8 @@ def update_world():
 
     if stage_index == 2:
         stage1.update_rain()
+    elif stage_index == 4:
+        stage1.update_asteroids()
 
     if (
         stage_index == 0
