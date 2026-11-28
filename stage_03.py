@@ -8,7 +8,7 @@ from collision import (
 
 class stage_03:
     ASTEROID_INTERVAL = 10.0
-    ASTEROIDS_PER_SPAWN = 15
+    ASTEROIDS_PER_SPAWN = 20
     ASTEROID_PASS_THROUGH_CHANCE = 0.4
     ASTEROID_FRAMES = (
         (80, 252, 150, 165),
