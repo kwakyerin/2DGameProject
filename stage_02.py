@@ -1,9 +1,15 @@
-from pico2d import load_image
+from pico2d import get_time, load_image
 from collision import check_platform_collision
 
 class stage_02:
     def __init__(self):
         self.background=load_image('background/Stage_02.png')
+        self.rain_background=load_image('background/Stage_02_Rain.png')
+        self.rain_opacity=0
+        self.rain_transition_started_at=None
+        self.rain_transition_from=0
+        self.rain_target_opacity=0
+        self.next_rain_toggle_at=get_time() + 5.0
         self.grass=load_image('Map_02/DGrass/Tile_01.png')
         self.Tile_01=load_image('Map_02/Blue_Cloud/BCloud_03.png')
         self.Tile_02=load_image('Map_02/Blue_Cloud/BCloud_04.png')
@@ -95,12 +101,39 @@ class stage_02:
 
     def draw(self):
         self.background.draw(550, 325, 1100, 650)
+        if self.rain_opacity > 0:
+            self.rain_background.opacify(self.rain_opacity)
+            self.rain_background.draw(550, 325, 1100, 650)
+            self.rain_background.opacify(1)
 
         for platform in self.platforms:
             platform['image'].draw(
                 platform['x'], platform['y'],
                 platform['width'], platform['height']
             )
+
+    def update_rain(self):
+        now = get_time()
+        fade_duration = 8.0
+
+        if now >= self.next_rain_toggle_at:
+            self.rain_transition_from = self.rain_opacity
+            self.rain_target_opacity = 1 - self.rain_target_opacity
+            self.rain_transition_started_at = now
+            self.next_rain_toggle_at = now + 5.0
+
+        if self.rain_transition_started_at is None:
+            return
+
+        elapsed = now - self.rain_transition_started_at
+        progress = min(elapsed / fade_duration, 1)
+        eased_progress = progress * progress * (3 - 2 * progress)
+        self.rain_opacity = self.rain_transition_from + (
+            self.rain_target_opacity - self.rain_transition_from
+        ) * eased_progress
+
+        if progress >= 1:
+            self.rain_transition_started_at = None
 
     def update(self):
         pass

@@ -5,6 +5,9 @@ from collision import check_platform_collision
 class stage_01:
     def __init__(self):
         self.background=load_image('background/Stage_01.png')
+        self.tree=load_image('Map_01/Tree/Tree_03.png')
+        self.tree_02=load_image('Map_01/Tree/Tree_02.png')
+        self.tree_01=load_image('Map_01/Tree/Tree_01.png')
         self.tile_01=load_image('Map_01/Green_Grass/Tile_01.png')
         self.tile_02=load_image('Map_01/Green_Grass/Tile_02.png')
         self.tile_04=load_image('Map_01/Green_Grass/Tile_04.png')
@@ -59,6 +62,9 @@ class stage_01:
 
     def draw(self):
         self.background.draw(550, 325, 1100, 650)
+        self.tree.draw(0, 170, 270, 330)
+        self.tree_02.draw(150, 150, 185, 330)
+        self.tree_01.draw(1000, 140, 155, 330)
 
         for platform in self.platforms:
             x = platform['x']
