@@ -75,12 +75,13 @@ def update_world():
     elif stage_index == 4:
         stage1.update_asteroids(character)
 
+    hurt = getattr(character, 'hurt', None)
     if (
         stage_index == 0
         and monster.check_character_contact(character)
-        and isinstance(character, Pink)
+        and callable(hurt)
     ):
-        character.hurt()
+        hurt()
 
     transformeffect.x=character.x
     transformeffect.y=character.y
