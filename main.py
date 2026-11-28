@@ -91,6 +91,7 @@ def update_world():
         and callable(hurt)
     ):
         hurt()
+    ui.update(character.is_hurt)
 
     transformeffect.x=character.x
     transformeffect.y=character.y
