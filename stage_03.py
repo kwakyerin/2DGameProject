@@ -3,8 +3,8 @@ from pico2d import get_time, load_image
 from collision import check_platform_collision
 
 class stage_03:
-    ASTEROID_INTERVAL = 5.0
-    ASTEROIDS_PER_SPAWN = 3
+    ASTEROID_INTERVAL = 10.0
+    ASTEROIDS_PER_SPAWN = 15
     ASTEROID_PASS_THROUGH_CHANCE = 0.4
     ASTEROID_FRAMES = (
         (80, 252, 150, 165),
@@ -32,7 +32,6 @@ class stage_03:
         self.asteroids=[]
         self.explosions=[]
         self.next_asteroid_at=get_time() + self.ASTEROID_INTERVAL
-        self.spawn_asteroid_next=True
         self.last_asteroid_update_at=get_time()
         self.Tile_01=load_image('Map_03/purple_space/P_Tile_01.png')
         self.Tile_02=load_image('Map_03/purple_space/P_Tile_11.png')
@@ -157,21 +156,19 @@ class stage_03:
         self.last_asteroid_update_at = now
 
         if now >= self.next_asteroid_at:
-            if self.spawn_asteroid_next:
-                for _ in range(self.ASTEROIDS_PER_SPAWN):
-                    self.asteroids.append({
-                        'x': random.uniform(0, 1100),
-                        'y': 650,
-                        'speed': random.uniform(250, 400),
-                        'wind_speed': random.uniform(70, 140),
-                        'pass_through_platforms': (
-                            random.random()
-                            < self.ASTEROID_PASS_THROUGH_CHANCE
-                        ),
-                        'frame_index': 1,
-                        'animation_time': 0,
-                    })
-            self.spawn_asteroid_next = not self.spawn_asteroid_next
+            for _ in range(self.ASTEROIDS_PER_SPAWN):
+                self.asteroids.append({
+                    'x': random.uniform(0, 1100),
+                    'y': 650,
+                    'speed': random.uniform(250, 400),
+                    'wind_speed': random.uniform(70, 140),
+                    'pass_through_platforms': (
+                        random.random()
+                        < self.ASTEROID_PASS_THROUGH_CHANCE
+                    ),
+                    'frame_index': 1,
+                    'animation_time': 0,
+                })
             self.next_asteroid_at = now + self.ASTEROID_INTERVAL
 
         for explosion in self.explosions:
