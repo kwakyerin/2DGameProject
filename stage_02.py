@@ -3,7 +3,9 @@ from pico2d import get_time, load_image
 from collision import check_platform_collision
 
 class stage_02:
-    RAIN_SPAWN_INTERVAL = 0.03
+    RAIN_MIN_SPAWN_INTERVAL = 0.03
+    RAIN_MAX_SPAWN_INTERVAL = 0.3
+    RAIN_DENSITY_RAMP_DURATION = 2.5
     RAIN_START_Y = 650
     RAIN_DROP_WIDTH = 28
     RAIN_DROP_HEIGHT = 72
@@ -16,6 +18,7 @@ class stage_02:
         self.rain_background=load_image('background/Stage_02_Rain.png')
         self.rain_image=load_image('Effect/Rain.png')
         self.rain_opacity=0
+        self.rain_density=0
         self.next_rain_toggle_at=get_time() + self.CLEAR_DURATION
         self.last_rain_update_at=get_time()
         self.rain_spawn_accumulator=0
@@ -122,8 +125,8 @@ class stage_02:
                 platform['width'], platform['height']
             )
 
-        if self.rain_opacity > 0:
-            self.rain_image.opacify(self.rain_opacity)
+        if self.rain_drops and self.rain_density > 0:
+            self.rain_image.opacify(self.rain_density)
             for drop in self.rain_drops:
                 self.rain_image.composite_draw(
                     self.RAIN_DROP_ANGLE,
@@ -148,20 +151,35 @@ class stage_02:
             )
             self.next_rain_toggle_at = now + duration
 
+        density_change = (
+            elapsed_since_update / self.RAIN_DENSITY_RAMP_DURATION
+        )
+        if self.rain_opacity > self.rain_density:
+            self.rain_density = min(
+                self.rain_opacity, self.rain_density + density_change
+            )
+        else:
+            self.rain_density = max(
+                self.rain_opacity, self.rain_density - density_change
+            )
+
         for drop in self.rain_drops:
             drop['x'] -= drop['wind_speed'] * elapsed_since_update
             drop['y'] -= drop['speed'] * elapsed_since_update
 
-        if self.rain_opacity > 0:
+        if self.rain_density > 0:
+            spawn_interval = self.RAIN_MAX_SPAWN_INTERVAL - (
+                self.RAIN_MAX_SPAWN_INTERVAL - self.RAIN_MIN_SPAWN_INTERVAL
+            ) * self.rain_density
             self.rain_spawn_accumulator += elapsed_since_update
-            while self.rain_spawn_accumulator >= self.RAIN_SPAWN_INTERVAL:
+            while self.rain_spawn_accumulator >= spawn_interval:
                 self.rain_drops.append({
                     'x': random.uniform(0, 1100),
                     'y': self.RAIN_START_Y,
                     'speed': random.uniform(250, 400),
                     'wind_speed': random.uniform(70, 140),
                 })
-                self.rain_spawn_accumulator -= self.RAIN_SPAWN_INTERVAL
+                self.rain_spawn_accumulator -= spawn_interval
         else:
             self.rain_spawn_accumulator = 0
 
