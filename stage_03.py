@@ -14,13 +14,15 @@ class stage_03:
     ASTEROID_DRAW_WIDTH = 80
     ASTEROID_MAX_DRAW_HEIGHT = 112
     ASTEROID_ANGLE = -0.25
-    EXPLOSION_SPRITE_LEFT = 990
-    EXPLOSION_SPRITE_BOTTOM = 217
-    EXPLOSION_SPRITE_WIDTH = 330
-    EXPLOSION_SPRITE_HEIGHT = 190
-    EXPLOSION_DURATION = 0.8
+    EXPLOSION_FRAMES = (
+        (1018, 217, 275, 190),
+        (1300, 217, 285, 260),
+        (1585, 217, 285, 275),
+        (1870, 222, 240, 205),
+    )
+    EXPLOSION_FRAME_DURATION = 0.15
+    EXPLOSION_DURATION = 0.6
     EXPLOSION_DRAW_WIDTH = 132
-    EXPLOSION_DRAW_HEIGHT = 76
 
     def __init__(self):
         self.background=load_image('background/Stage_03.png')
@@ -123,14 +125,21 @@ class stage_03:
 
         for explosion in self.explosions:
             progress = explosion['elapsed'] / self.EXPLOSION_DURATION
-            scale = 0.5 + progress
-            draw_height = self.EXPLOSION_DRAW_HEIGHT * scale
-            self.asteroid_image.opacify(1 - progress)
+            frame_index = min(
+                int(explosion['elapsed'] / self.EXPLOSION_FRAME_DURATION),
+                len(self.EXPLOSION_FRAMES) - 1,
+            )
+            frame_left, frame_bottom, frame_width, frame_height = (
+                self.EXPLOSION_FRAMES[frame_index]
+            )
+            scale = 0.7 + 0.5 * progress
+            draw_width = self.EXPLOSION_DRAW_WIDTH * scale
+            draw_height = draw_width * frame_height / frame_width
             self.asteroid_image.clip_composite_draw(
-                self.EXPLOSION_SPRITE_LEFT,
-                self.EXPLOSION_SPRITE_BOTTOM,
-                self.EXPLOSION_SPRITE_WIDTH,
-                self.EXPLOSION_SPRITE_HEIGHT,
+                frame_left,
+                frame_bottom,
+                frame_width,
+                frame_height,
                 0,
                 '',
                 explosion['x'],
@@ -138,7 +147,6 @@ class stage_03:
                 self.EXPLOSION_DRAW_WIDTH * scale,
                 draw_height,
             )
-        self.asteroid_image.opacify(1)
 
     def update_asteroids(self):
         now = get_time()
