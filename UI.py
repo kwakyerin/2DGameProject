@@ -17,6 +17,10 @@ class UI:
     BLUE_IMAGE_HEIGHT = 80
     BLUE_X_OFFSET = 2
     BLUE_Y_OFFSET = -3
+    YELLOW_SLOT_X_RATIO = 0.70
+    YELLOW_IMAGE_WIDTH = 78
+    YELLOW_IMAGE_HEIGHT = 84
+    YELLOW_Y_OFFSET = -2
     RIGHT_MARGIN = 20
     TOP_MARGIN = 20
     SCREEN_WIDTH = 1100
@@ -26,6 +30,7 @@ class UI:
         self.panel_image = load_image('UI/UI.png')
         self.pink_image = load_image('UI/Pink.png')
         self.blue_image = load_image('UI/Blue.png')
+        self.yellow_image = load_image('UI/Yellow.png')
         self.full_heart_image = load_image('UI/Heart_01.png')
         self.empty_heart_image = load_image('UI/Heart_02.png')
         self.lost_hearts = 0
@@ -73,6 +78,15 @@ class UI:
             pink_y + self.BLUE_Y_OFFSET,
             self.BLUE_IMAGE_WIDTH,
             self.BLUE_IMAGE_HEIGHT,
+        )
+        yellow_x = (
+            panel_left + self.PANEL_WIDTH * self.YELLOW_SLOT_X_RATIO
+        )
+        self.yellow_image.draw(
+            yellow_x,
+            pink_y + self.YELLOW_Y_OFFSET,
+            self.YELLOW_IMAGE_WIDTH,
+            self.YELLOW_IMAGE_HEIGHT,
         )
 
         y = self.SCREEN_HEIGHT - self.TOP_MARGIN - self.HEART_SIZE / 2
