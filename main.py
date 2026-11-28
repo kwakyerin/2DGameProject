@@ -1,6 +1,6 @@
 from pico2d import*
 from transform_effect import transform_effect
-from effect import Effect, FireEffect, BubbleEffect
+from effect import Effect, FireEffect, FireAttackEffect, BubbleEffect
 from Pink import Pink
 from Blue import Blue
 from Yellow import Yellow
@@ -21,7 +21,8 @@ START_STAGE = stage_02
 
 #월드 구성하는 객체들 초기화
 def reset_world():
-    global running,character,transformeffect,treat_effect,fire_effect,bubble_effect
+    global running, character, transformeffect, treat_effect
+    global fire_effect, fire_attack_effect, bubble_effect
     global stage1,stage_index,monster,attack_hit,transform_cooldown_until
 
     running=True
@@ -34,6 +35,7 @@ def reset_world():
     transformeffect=transform_effect(character.x,character.y)
     treat_effect=Effect()
     fire_effect=FireEffect()
+    fire_attack_effect=FireAttackEffect()
     bubble_effect=BubbleEffect()
     pass
 
@@ -89,6 +91,7 @@ def update_world():
     transformeffect.update()
     treat_effect.update(character.x, character.y)
     fire_effect.update(character.x, character.y)
+    fire_attack_effect.update()
     bubble_effect.update(character.x, character.y)
     pass
 
@@ -102,6 +105,7 @@ def render_world():
     treat_effect.draw()
     fire_effect.draw()
     character.draw()
+    fire_attack_effect.draw()
     bubble_effect.draw()
     if stage_index == 2:
         stage1.draw_white_flash()
@@ -158,11 +162,20 @@ def handle_events():
                 character.frame=0
                 character.is_attack=False
             elif event.key==SDLK_j:
-                was_attacking = character.is_attack
-                character.attack()
-                if not was_attacking and character.is_attack:
-                    attack_hit = False
-                character.speed=0
+                if isinstance(character, Yellow) and fire_effect.is_active:
+                    fire_attack_effect.start(
+                        character.x, character.y, character.dir
+                    )
+                    character.is_attack = False
+                    character.frame = 0
+                    character.animation_time = 0
+                    character.speed = 0
+                else:
+                    was_attacking = character.is_attack
+                    character.attack()
+                    if not was_attacking and character.is_attack:
+                        attack_hit = False
+                    character.speed=0
             elif event.key==SDLK_w:
                 character.jump()
             elif event.key in (SDLK_1, SDLK_2, SDLK_3):

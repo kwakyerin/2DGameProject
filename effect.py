@@ -130,6 +130,90 @@ class FireEffect:
         )
 
 
+class FireAttackEffect:
+    FRAME_RECTS = (
+        (92, 306, 58, 60),
+        (230, 288, 134, 95),
+        (423, 280, 182, 121),
+        (665, 266, 225, 151),
+        (945, 255, 254, 182),
+        (1243, 250, 279, 196),
+        (1566, 250, 283, 211),
+        (1887, 283, 194, 155),
+    )
+    FRAME_COUNT = len(FRAME_RECTS)
+    FRAME_DELAY = 0.07
+    DRAW_SCALE = 0.24
+    DRAW_MAX_WIDTH = max(frame[2] for frame in FRAME_RECTS) * DRAW_SCALE
+    SPAWN_OFFSET = 50
+    MOVE_SPEED = 8
+    SCREEN_WIDTH = 1100
+
+    def __init__(self):
+        self.image = load_image('Effect/Fire_Attack.png')
+        self.projectiles = []
+
+    def start(self, x, y, direction):
+        direction = 1 if direction >= 0 else -1
+        self.projectiles.append({
+            'x': x + direction * self.SPAWN_OFFSET,
+            'y': y,
+            'direction': direction,
+            'frame': 0,
+            'animation_time': 0,
+        })
+
+    def update(self):
+        active_projectiles = []
+        for projectile in self.projectiles:
+            projectile['x'] += projectile['direction'] * self.MOVE_SPEED
+            projectile['animation_time'] += 0.01
+            if projectile['animation_time'] >= self.FRAME_DELAY:
+                projectile['frame'] += 1
+                projectile['animation_time'] -= self.FRAME_DELAY
+
+            if (
+                projectile['frame'] < self.FRAME_COUNT
+                and -self.DRAW_MAX_WIDTH <= projectile['x']
+                <= self.SCREEN_WIDTH + self.DRAW_MAX_WIDTH
+            ):
+                active_projectiles.append(projectile)
+
+        self.projectiles = active_projectiles
+
+    def draw(self):
+        for projectile in self.projectiles:
+            frame_left, frame_bottom, frame_width, frame_height = (
+                self.FRAME_RECTS[projectile['frame']]
+            )
+            draw_width = frame_width * self.DRAW_SCALE
+            draw_height = frame_height * self.DRAW_SCALE
+            if projectile['direction'] < 0:
+                self.image.clip_composite_draw(
+                    frame_left,
+                    frame_bottom,
+                    frame_width,
+                    frame_height,
+                    0,
+                    'h',
+                    projectile['x'],
+                    projectile['y'],
+                    draw_width,
+                    draw_height,
+                )
+            else:
+                self.image.clip_draw(
+                    frame_left,
+                    frame_bottom,
+                    frame_width,
+                    frame_height,
+                    projectile['x'],
+                    projectile['y'],
+                    draw_width,
+                    draw_height,
+                )
+
+
 class BubbleEffect:
     DURATION = 10.0
     DRAW_SIZE = 110
