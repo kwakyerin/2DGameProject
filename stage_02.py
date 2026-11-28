@@ -1,15 +1,26 @@
+import random
 from pico2d import get_time, load_image
 from collision import check_platform_collision
 
 class stage_02:
+    RAIN_SPAWN_INTERVAL = 0.03
+    RAIN_START_Y = 650
+    RAIN_DROP_WIDTH = 28
+    RAIN_DROP_HEIGHT = 72
+    RAIN_DROP_ANGLE = -0.25
+
     def __init__(self):
         self.background=load_image('background/Stage_02.png')
         self.rain_background=load_image('background/Stage_02_Rain.png')
+        self.rain_image=load_image('Effect/Rain.png')
         self.rain_opacity=0
         self.rain_transition_started_at=None
         self.rain_transition_from=0
         self.rain_target_opacity=0
         self.next_rain_toggle_at=get_time() + 5.0
+        self.last_rain_update_at=get_time()
+        self.rain_spawn_accumulator=0
+        self.rain_drops=[]
         self.grass=load_image('Map_02/DGrass/Tile_01.png')
         self.Tile_01=load_image('Map_02/Blue_Cloud/BCloud_03.png')
         self.Tile_02=load_image('Map_02/Blue_Cloud/BCloud_04.png')
@@ -112,8 +123,23 @@ class stage_02:
                 platform['width'], platform['height']
             )
 
+        if self.rain_opacity > 0:
+            self.rain_image.opacify(self.rain_opacity)
+            for drop in self.rain_drops:
+                self.rain_image.composite_draw(
+                    self.RAIN_DROP_ANGLE,
+                    '',
+                    drop['x'],
+                    drop['y'],
+                    self.RAIN_DROP_WIDTH,
+                    self.RAIN_DROP_HEIGHT,
+                )
+            self.rain_image.opacify(1)
+
     def update_rain(self):
         now = get_time()
+        elapsed_since_update = now - self.last_rain_update_at
+        self.last_rain_update_at = now
         fade_duration = 8.0
 
         if now >= self.next_rain_toggle_at:
@@ -134,6 +160,28 @@ class stage_02:
 
         if progress >= 1:
             self.rain_transition_started_at = None
+
+        for drop in self.rain_drops:
+            drop['x'] -= drop['wind_speed'] * elapsed_since_update
+            drop['y'] -= drop['speed'] * elapsed_since_update
+
+        if self.rain_target_opacity > 0:
+            self.rain_spawn_accumulator += elapsed_since_update
+            while self.rain_spawn_accumulator >= self.RAIN_SPAWN_INTERVAL:
+                self.rain_drops.append({
+                    'x': random.uniform(0, 1100),
+                    'y': self.RAIN_START_Y,
+                    'speed': random.uniform(250, 400),
+                    'wind_speed': random.uniform(70, 140),
+                })
+                self.rain_spawn_accumulator -= self.RAIN_SPAWN_INTERVAL
+        else:
+            self.rain_spawn_accumulator = 0
+
+        self.rain_drops = [
+            drop for drop in self.rain_drops
+            if drop['y'] > -32 and drop['x'] > -32
+        ]
 
     def update(self):
         pass
